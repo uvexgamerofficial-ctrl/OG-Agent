@@ -83,6 +83,14 @@
       position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
       overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
     }
+    .skip-link {
+      position:fixed; z-index:2200; top:12px; left:12px; transform:translateY(-160%);
+      padding:12px 16px; border:1px solid var(--accent); border-radius:10px;
+      color:var(--ink); background:var(--accent); text-decoration:none; font:700 10px/1 var(--sans);
+      transition:transform .2s var(--ease);
+    }
+    .skip-link:focus { transform:none; }
+    body.page-hidden .site *, body.page-hidden .site *::before, body.page-hidden .site *::after { animation-play-state:paused !important; }
 
     /* Intro */
     .intro {
@@ -302,6 +310,20 @@
     .main-nav a:hover { color:var(--paper); }
     .main-nav a:hover::after { right:0; }
     .header-actions { display:flex; align-items:center; justify-content:flex-end; gap:8px; }
+    .icon-action,.mobile-menu-toggle {
+      width:44px; height:44px; display:grid; place-items:center; flex:0 0 auto;
+      border:1px solid var(--line); border-radius:12px; color:var(--paper); background:rgba(255,255,255,.025);
+      cursor:pointer; transition:transform .25s var(--ease),background .25s,border-color .25s;
+    }
+    .icon-action:hover,.mobile-menu-toggle:hover { transform:translateY(-2px); border-color:var(--line-strong); background:rgba(var(--accent-rgb),.08); }
+    .icon-action svg { width:17px; height:17px; fill:none; stroke:currentColor; stroke-width:1.6; }
+    .mobile-menu-toggle { display:none; position:relative; }
+    .mobile-menu-toggle i,.mobile-menu-toggle::before,.mobile-menu-toggle::after { content:""; width:17px; height:1px; position:absolute; background:currentColor; transition:transform .25s,opacity .25s; }
+    .mobile-menu-toggle::before { transform:translateY(-5px); }
+    .mobile-menu-toggle::after { transform:translateY(5px); }
+    .mobile-menu-toggle[aria-expanded="true"] i { opacity:0; }
+    .mobile-menu-toggle[aria-expanded="true"]::before { transform:rotate(45deg); }
+    .mobile-menu-toggle[aria-expanded="true"]::after { transform:rotate(-45deg); }
     .header-action, .style-action, .primary-action, .secondary-action {
       display:inline-flex;
       align-items:center;
@@ -328,6 +350,28 @@
     .style-action #styleName { color:var(--accent); }
     .secondary-action { color:var(--paper); background:rgba(255,255,255,.025); }
     .secondary-action:hover { transform:translateY(-2px); border-color:var(--line-strong); background:rgba(var(--accent-rgb),.06); }
+
+    body.mobile-menu-open { overflow:hidden; }
+    .mobile-menu {
+      position:fixed; inset:0; z-index:980; display:grid; align-items:end; padding:86px 12px 12px;
+      background:rgba(0,0,0,.66); backdrop-filter:blur(16px); opacity:0; visibility:hidden;
+      transition:opacity .28s,visibility .28s;
+    }
+    .mobile-menu.is-open { opacity:1; visibility:visible; }
+    .mobile-menu-panel {
+      width:100%; max-height:calc(100svh - 98px); overflow:auto; padding:22px;
+      border:1px solid var(--line-strong); border-radius:24px; background:#10100e;
+      box-shadow:0 26px 90px rgba(0,0,0,.65); transform:translateY(24px); transition:transform .32s var(--ease);
+    }
+    .mobile-menu.is-open .mobile-menu-panel { transform:none; }
+    .mobile-menu-head { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:20px; }
+    .mobile-menu-head strong { font:400 28px/1 var(--display); }
+    .mobile-menu-head span { color:var(--accent); font:700 8px/1 var(--mono); letter-spacing:.16em; text-transform:uppercase; }
+    .mobile-menu-nav { display:grid; }
+    .mobile-menu-nav a { display:flex; justify-content:space-between; padding:17px 2px; border-top:1px solid var(--line); color:var(--paper); text-decoration:none; font:600 16px/1.2 var(--sans); }
+    .mobile-menu-nav a::after { content:"→"; color:var(--accent); }
+    .mobile-menu-actions { display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-top:18px; }
+    .mobile-menu-actions button { min-height:46px; border:1px solid var(--line); border-radius:12px; color:var(--paper); background:rgba(var(--accent-rgb),.04); cursor:pointer; font:700 9px/1 var(--sans); letter-spacing:.08em; text-transform:uppercase; }
 
     .hero {
       position:relative;
@@ -530,6 +574,14 @@
     .capability h3 { max-width:420px; margin:72px 0 11px; font:400 clamp(28px,3vw,40px)/1 var(--display); letter-spacing:-.03em; }
     .capability p { max-width:470px; margin:0; color:var(--muted); font-size:13px; line-height:1.6; }
     .guide-shell { display:grid; gap:16px; }
+    .guide-toc {
+      position:sticky; z-index:70; top:96px; display:flex; gap:7px; margin:0 0 16px; padding:9px;
+      overflow:auto; scrollbar-width:none; border:1px solid var(--line); border-radius:15px;
+      background:rgba(9,9,8,.84); backdrop-filter:blur(18px);
+    }
+    .guide-toc::-webkit-scrollbar { display:none; }
+    .guide-toc a { flex:0 0 auto; padding:10px 13px; border:1px solid transparent; border-radius:9px; color:var(--muted); text-decoration:none; font:700 8px/1 var(--mono); letter-spacing:.1em; text-transform:uppercase; }
+    .guide-toc a:hover,.guide-toc a.is-current { color:var(--ink); border-color:var(--accent); background:var(--accent); }
     .setup-flow { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; counter-reset:setup; }
     .setup-step { position:relative; min-height:190px; padding:24px; border:1px solid var(--line); border-radius:18px; background:rgba(255,255,255,.014); overflow:hidden; counter-increment:setup; }
     .setup-step::before { content:"0" counter(setup); display:block; margin-bottom:36px; color:var(--accent); font:700 9px/1 var(--mono); letter-spacing:.16em; }
@@ -544,16 +596,41 @@
     .guide-badges { display:flex; flex-wrap:wrap; gap:7px; margin-bottom:22px; }
     .guide-badges span { padding:8px 10px; border:1px solid var(--line); border-radius:999px; color:#bcb69e; font:600 8px/1 var(--mono); letter-spacing:.08em; text-transform:uppercase; }
     .gesture-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
-    .gesture-card { min-height:230px; display:flex; flex-direction:column; padding:22px; border:1px solid var(--line); border-radius:17px; background:rgba(5,5,4,.35); }
+    .gesture-card { min-height:260px; display:flex; flex-direction:column; padding:22px; border:1px solid var(--line); border-radius:17px; background:rgba(5,5,4,.35); cursor:pointer; transition:transform .25s var(--ease),border-color .25s,background .25s; }
+    .gesture-card:hover,.gesture-card:focus-within { transform:translateY(-3px); border-color:rgba(var(--accent-rgb),.3); background:rgba(var(--accent-rgb),.035); }
     .gesture-card strong { width:44px; height:44px; display:grid; place-items:center; border:1px solid rgba(var(--accent-rgb),.28); border-radius:50%; color:var(--accent); font:700 11px/1 var(--mono); box-shadow:inset 0 0 22px rgba(var(--accent-rgb),.045); }
     .gesture-card h4 { margin:auto 0 10px; font:400 25px/1.05 var(--display); }
     .gesture-card p { margin:0; color:var(--muted); font-size:11px; line-height:1.58; }
     .gesture-card code { display:inline-block; margin-top:12px; color:var(--accent); font:600 9px/1.5 var(--mono); }
+    .gesture-visual { position:relative; height:58px; margin:13px 0 16px; overflow:hidden; border:1px solid rgba(var(--accent-rgb),.11); border-radius:10px; background:linear-gradient(90deg,rgba(var(--accent-rgb),.025),transparent); }
+    .gesture-visual::before,.gesture-visual::after { content:""; position:absolute; border-radius:999px; background:var(--accent); box-shadow:0 0 14px rgba(var(--accent-rgb),.35); }
+    .gesture-visual::before { width:8px; height:8px; left:18%; top:25px; }
+    .gesture-visual::after { width:34%; height:1px; left:32%; top:29px; opacity:.4; }
+    .gesture-card.is-demonstrating .gesture-visual[data-demo="move"]::before { animation:demoMove 1.5s var(--ease) both; }
+    .gesture-card.is-demonstrating .gesture-visual[data-demo="click"]::before { animation:demoClick 1.2s var(--ease) both; }
+    .gesture-card.is-demonstrating .gesture-visual[data-demo="scroll"]::before { animation:demoScroll 1.5s var(--ease) both; }
+    .gesture-card.is-demonstrating .gesture-visual[data-demo="apps"]::before { animation:demoApps 1.4s var(--ease) both; }
+    .gesture-card.is-demonstrating .gesture-visual[data-demo="desktops"]::before { animation:demoDesktop 1.6s var(--ease) both; }
+    .gesture-visual[data-demo="zoom"]::before { left:34%; }
+    .gesture-visual[data-demo="zoom"]::after { width:8px; height:8px; left:auto; right:34%; top:25px; opacity:1; }
+    .gesture-card.is-demonstrating .gesture-visual[data-demo="zoom"]::before { animation:demoZoomLeft 1.6s var(--ease) both; }
+    .gesture-card.is-demonstrating .gesture-visual[data-demo="zoom"]::after { animation:demoZoomRight 1.6s var(--ease) both; }
+    .gesture-play { margin-top:auto; padding:9px 0 0; border:0; color:#777363; background:none; cursor:pointer; text-align:left; font:700 8px/1 var(--mono); letter-spacing:.1em; text-transform:uppercase; }
+    .gesture-play:hover { color:var(--accent); }
     .guide-callout { display:grid; grid-template-columns:auto 1fr; gap:14px; align-items:start; margin-top:14px; padding:18px; border:1px solid rgba(var(--accent-rgb),.18); border-radius:14px; background:rgba(var(--accent-rgb),.035); }
     .guide-callout b { width:28px; height:28px; display:grid; place-items:center; border-radius:50%; color:var(--ink); background:var(--accent); font:800 11px/1 var(--mono); }
     .guide-callout p { margin:0; color:#bcb69e; font-size:11px; line-height:1.65; }
     .guide-callout strong { color:var(--paper); }
     .command-library { display:grid; gap:10px; margin-top:14px; }
+    .command-tools { display:grid; grid-template-columns:minmax(240px,1fr) auto; gap:12px; align-items:center; margin-top:18px; padding:14px; border:1px solid var(--line); border-radius:15px; background:rgba(0,0,0,.18); }
+    .command-search { position:relative; }
+    .command-search input { width:100%; min-height:46px; padding:0 42px 0 15px; border:1px solid var(--line); border-radius:11px; color:var(--paper); background:#090908; outline:0; font:500 12px/1 var(--sans); }
+    .command-search input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(var(--accent-rgb),.08); }
+    .command-search span { position:absolute; right:14px; top:50%; transform:translateY(-50%); color:var(--muted); font:700 9px/1 var(--mono); }
+    .command-filter-row { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:6px; }
+    .command-filter { min-height:34px; padding:0 10px; border:1px solid var(--line); border-radius:999px; color:var(--muted); background:transparent; cursor:pointer; font:700 7px/1 var(--mono); letter-spacing:.08em; text-transform:uppercase; }
+    .command-filter:hover,.command-filter.is-active { color:var(--ink); border-color:var(--accent); background:var(--accent); }
+    .command-results-meta { grid-column:1/-1; display:flex; justify-content:space-between; gap:12px; color:#777363; font:600 8px/1.4 var(--mono); letter-spacing:.06em; }
     .command-group { border:1px solid var(--line); border-radius:15px; background:rgba(255,255,255,.012); overflow:hidden; }
     .command-group summary { min-height:64px; display:flex; align-items:center; justify-content:space-between; gap:20px; padding:0 20px; color:var(--paper); cursor:pointer; list-style:none; font:600 13px/1 var(--sans); }
     .command-group summary::-webkit-details-marker { display:none; }
@@ -561,9 +638,29 @@
     .command-group[open] summary::after { transform:rotate(45deg); }
     .command-group summary span { color:var(--muted); font:600 8px/1 var(--mono); letter-spacing:.12em; text-transform:uppercase; }
     .guide-command-list { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; padding:0 20px 20px; }
-    .command-item { min-width:0; min-height:66px; padding:12px; border:1px solid rgba(var(--accent-rgb),.1); border-radius:10px; background:rgba(0,0,0,.18); }
+    .command-item { position:relative; min-width:0; min-height:76px; padding:12px 42px 12px 12px; border:1px solid rgba(var(--accent-rgb),.1); border-radius:10px; background:rgba(0,0,0,.18); }
     .command-item code { display:block; overflow-wrap:anywhere; color:var(--accent); font:600 10px/1.4 var(--mono); }
     .command-item small { display:block; margin-top:7px; color:#777363; font-size:9px; line-height:1.35; }
+    .command-copy { position:absolute; right:8px; top:8px; width:27px; height:27px; display:grid; place-items:center; border:1px solid var(--line); border-radius:8px; color:var(--muted); background:rgba(255,255,255,.02); cursor:pointer; font:700 9px/1 var(--mono); }
+    .command-copy:hover { color:var(--ink); border-color:var(--accent); background:var(--accent); }
+    .command-empty { padding:24px; border:1px dashed var(--line); border-radius:14px; color:var(--muted); text-align:center; font-size:12px; }
+    .demo-terminal { overflow:hidden; border:1px solid var(--line); border-radius:18px; background:#080807; box-shadow:inset 0 1px rgba(255,255,255,.025); }
+    .demo-terminal-top { min-height:52px; display:flex; align-items:center; justify-content:space-between; gap:16px; padding:0 16px; border-bottom:1px solid var(--line); }
+    .demo-terminal-top span { color:var(--accent); font:700 8px/1 var(--mono); letter-spacing:.12em; text-transform:uppercase; }
+    .demo-terminal-top small { color:#777363; font:600 8px/1 var(--mono); }
+    .demo-output { min-height:210px; max-height:320px; overflow:auto; padding:18px; color:#bdb7a0; font:500 11px/1.7 var(--mono); }
+    .demo-line { display:grid; grid-template-columns:auto 1fr; gap:10px; padding:4px 0; }
+    .demo-line b { color:var(--accent); font-weight:700; }
+    .demo-line.success span { color:var(--ok); }
+    .demo-line.warning span { color:#d8ba70; }
+    .demo-line.error span { color:var(--danger); }
+    .demo-form { display:grid; grid-template-columns:1fr auto; gap:8px; padding:12px; border-top:1px solid var(--line); }
+    .demo-form input { min-width:0; min-height:44px; padding:0 14px; border:1px solid var(--line); border-radius:10px; color:var(--paper); background:#11110f; outline:0; }
+    .demo-form input:focus { border-color:var(--accent); }
+    .demo-form button { min-width:90px; border:1px solid var(--accent); border-radius:10px; color:var(--ink); background:var(--accent); cursor:pointer; font:700 9px/1 var(--sans); text-transform:uppercase; }
+    .demo-presets { display:flex; flex-wrap:wrap; gap:7px; margin-top:12px; }
+    .demo-presets button { padding:9px 11px; border:1px solid var(--line); border-radius:999px; color:var(--muted); background:transparent; cursor:pointer; font:600 8px/1 var(--mono); }
+    .demo-presets button:hover { color:var(--ink); border-color:var(--accent); background:var(--accent); }
     .shortcut-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:9px; margin-top:14px; }
     .shortcut { padding:16px 12px; border:1px solid var(--line); border-radius:12px; background:rgba(255,255,255,.012); }
     .shortcut kbd { display:block; margin-bottom:10px; color:var(--accent); font:700 9px/1.4 var(--mono); }
@@ -602,17 +699,74 @@
     .install-spec { display:grid; gap:10px; }
     .install-spec div { display:flex; justify-content:space-between; gap:20px; padding:16px 0; border-bottom:1px solid var(--line); color:var(--muted); font-size:12px; }
     .install-spec strong { color:var(--paper); font-weight:600; }
+    .download-note { margin-top:18px; padding:14px 16px; border:1px solid rgba(var(--accent-rgb),.16); border-radius:12px; color:#a9a38c; background:rgba(var(--accent-rgb),.035); font-size:11px; line-height:1.6; }
+    .download-note strong { color:var(--paper); }
+    .preflight-panel { display:grid; grid-template-columns:minmax(0,.72fr) minmax(0,1.28fr); gap:26px; margin-top:16px; padding:clamp(24px,4vw,40px); border:1px solid var(--line); border-radius:24px; background:rgba(255,255,255,.012); }
+    .preflight-copy h3 { margin:10px 0 12px; font:400 34px/1 var(--display); }
+    .preflight-copy p { margin:0 0 20px; color:var(--muted); font-size:12px; line-height:1.65; }
+    .preflight-actions { display:flex; flex-wrap:wrap; gap:8px; }
+    .preflight-actions button { min-height:42px; padding:0 13px; border:1px solid var(--line); border-radius:10px; color:var(--paper); background:rgba(var(--accent-rgb),.035); cursor:pointer; font:700 8px/1 var(--sans); letter-spacing:.08em; text-transform:uppercase; }
+    .preflight-actions button:first-child { color:var(--ink); border-color:var(--accent); background:var(--accent); }
+    .preflight-checks { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
+    .preflight-check { min-height:82px; padding:14px; border:1px solid var(--line); border-radius:12px; background:rgba(0,0,0,.18); }
+    .preflight-check span { display:flex; align-items:center; gap:8px; color:#777363; font:700 8px/1 var(--mono); letter-spacing:.08em; text-transform:uppercase; }
+    .preflight-check span::before { content:""; width:7px; height:7px; border-radius:50%; background:#676357; }
+    .preflight-check strong { display:block; margin-top:13px; color:var(--paper); font-size:11px; font-weight:600; line-height:1.35; }
+    .preflight-check.pass span::before { background:var(--ok); box-shadow:0 0 10px rgba(121,216,162,.45); }
+    .preflight-check.warn span::before { background:#d8ba70; box-shadow:0 0 10px rgba(216,186,112,.38); }
+    .preflight-check.fail span::before { background:var(--danger); box-shadow:0 0 10px rgba(255,123,112,.38); }
+    .known-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+    .known-item { min-height:180px; padding:22px; border:1px solid var(--line); border-radius:17px; background:rgba(255,255,255,.012); }
+    .known-item span { display:inline-flex; padding:7px 9px; border:1px solid rgba(216,186,112,.2); border-radius:999px; color:#d8ba70; font:700 7px/1 var(--mono); letter-spacing:.1em; text-transform:uppercase; }
+    .known-item h3 { margin:34px 0 9px; font:400 24px/1.05 var(--display); }
+    .known-item p { margin:0; color:var(--muted); font-size:11px; line-height:1.6; }
+    .legal-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+    .legal-card { border:1px solid var(--line); border-radius:16px; background:rgba(255,255,255,.012); overflow:hidden; }
+    .legal-card summary { min-height:66px; display:flex; align-items:center; justify-content:space-between; padding:0 18px; cursor:pointer; list-style:none; color:var(--paper); font:600 13px/1 var(--sans); }
+    .legal-card summary::-webkit-details-marker { display:none; }
+    .legal-card summary::after { content:"+"; color:var(--accent); font-size:18px; }
+    .legal-card[open] summary::after { content:"−"; }
+    .legal-body { padding:0 18px 20px; color:var(--muted); font-size:11px; line-height:1.7; }
+    .legal-body p { margin:0 0 10px; }
+    .legal-body a { color:var(--accent); }
     .faq { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:52px; }
     .faq article { padding:24px; border:1px solid var(--line); border-radius:18px; background:rgba(255,255,255,.012); }
     .faq h3 { margin:0 0 12px; font:400 22px/1.15 var(--display); }
     .faq p { margin:0; color:var(--muted); font-size:12px; line-height:1.65; }
-    .site-footer { width:min(1180px,calc(100% - 40px)); margin:0 auto; padding:38px 0 50px; border-top:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; gap:24px; color:var(--muted); font:600 8px/1.4 var(--mono); letter-spacing:.14em; text-transform:uppercase; }
+    .site-footer { width:min(1180px,calc(100% - 40px)); margin:0 auto; padding:38px 0 50px; border-top:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:24px; color:var(--muted); font:600 8px/1.4 var(--mono); letter-spacing:.14em; text-transform:uppercase; }
     .footer-brand { display:flex; align-items:center; gap:10px; color:var(--paper); }
     .footer-brand .mini-logo { width:30px; height:30px; }
+    .footer-links { display:flex; flex-wrap:wrap; justify-content:center; gap:16px; }
+    .footer-links a,.footer-links button { padding:5px 0; border:0; color:var(--muted); background:none; cursor:pointer; text-decoration:none; font:inherit; letter-spacing:inherit; text-transform:inherit; }
+    .footer-links a:hover,.footer-links button:hover { color:var(--accent); }
     .reveal { opacity:0; transform:translateY(28px); transition:opacity .75s var(--ease),transform .75s var(--ease); }
     .reveal.is-visible { opacity:1; transform:none; }
     .toast { position:fixed; z-index:1500; left:50%; bottom:28px; transform:translate(-50%,30px); padding:13px 18px; border:1px solid var(--line-strong); border-radius:12px; background:#141411; box-shadow:0 20px 60px #000; color:var(--paper); font-size:12px; opacity:0; visibility:hidden; transition:.3s var(--ease); }
     .toast.is-visible { opacity:1; visibility:visible; transform:translate(-50%,0); }
+
+    body.setup-open { overflow:hidden; }
+    .setup-overlay { position:fixed; inset:0; z-index:1700; display:grid; place-items:center; padding:18px; background:rgba(0,0,0,.76); backdrop-filter:blur(18px); opacity:0; visibility:hidden; transition:opacity .3s,visibility .3s; }
+    .setup-overlay.is-open { opacity:1; visibility:visible; }
+    .setup-wizard { width:min(760px,100%); max-height:min(820px,94svh); overflow:auto; border:1px solid var(--line-strong); border-radius:26px; background:#10100e; box-shadow:0 32px 110px rgba(0,0,0,.72); transform:translateY(20px) scale(.985); transition:transform .35s var(--ease); }
+    .setup-overlay.is-open .setup-wizard { transform:none; }
+    .setup-wizard-head { min-height:76px; display:flex; align-items:center; justify-content:space-between; gap:18px; padding:0 22px; border-bottom:1px solid var(--line); }
+    .setup-wizard-head strong { font:400 25px/1 var(--display); }
+    .setup-wizard-head span { display:block; margin-top:5px; color:var(--accent); font:700 7px/1 var(--mono); letter-spacing:.14em; text-transform:uppercase; }
+    .setup-close { width:40px; height:40px; border:1px solid var(--line); border-radius:50%; color:var(--paper); background:transparent; cursor:pointer; font-size:20px; }
+    .wizard-progress { height:3px; background:rgba(var(--accent-rgb),.08); }
+    .wizard-progress i { display:block; width:var(--progress,14.28%); height:100%; background:var(--accent); box-shadow:0 0 14px rgba(var(--accent-rgb),.35); transition:width .35s var(--ease); }
+    .wizard-body { min-height:350px; padding:clamp(26px,5vw,52px); }
+    .wizard-step { display:none; }
+    .wizard-step.is-active { display:block; animation:wizardIn .35s var(--ease) both; }
+    .wizard-step small { color:var(--accent); font:700 8px/1 var(--mono); letter-spacing:.15em; text-transform:uppercase; }
+    .wizard-step h3 { margin:18px 0 16px; font:400 clamp(36px,6vw,58px)/.95 var(--display); letter-spacing:-.035em; }
+    .wizard-step p { max-width:600px; margin:0 0 14px; color:var(--muted); font-size:13px; line-height:1.7; }
+    .wizard-step code { color:var(--accent); }
+    .wizard-tip { margin-top:20px; padding:16px; border:1px solid rgba(var(--accent-rgb),.16); border-radius:12px; color:#bcb69e; background:rgba(var(--accent-rgb),.035); font-size:11px; line-height:1.6; }
+    .wizard-footer { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:16px 22px 22px; }
+    .wizard-footer button { min-height:44px; padding:0 18px; border:1px solid var(--line); border-radius:11px; color:var(--paper); background:rgba(255,255,255,.025); cursor:pointer; font:700 9px/1 var(--sans); letter-spacing:.08em; text-transform:uppercase; }
+    .wizard-footer button:last-child { color:var(--ink); border-color:var(--accent); background:var(--accent); }
+    .wizard-footer button:disabled { opacity:.35; cursor:not-allowed; }
 
     /* Beta feedback */
     body.feedback-open { overflow:hidden; }
@@ -699,8 +853,21 @@
     .feedback-gmail,.feedback-copy { color:var(--paper); background:rgba(255,255,255,.025); }
     .feedback-actions button:hover { transform:translateY(-2px); border-color:var(--line-strong); }
     .feedback-privacy { margin:14px 0 0; color:#716d5e; font:500 8px/1.55 var(--mono); letter-spacing:.04em; }
+    .feedback-draft { margin:8px 0 0; color:#777363; font:600 8px/1.5 var(--mono); }
+    .feedback-thanks { position:relative; margin-top:16px; padding:18px 18px 18px 48px; overflow:hidden; border:1px solid rgba(121,216,162,.24); border-radius:14px; color:#bfe8d0; background:rgba(121,216,162,.055); font-size:11px; line-height:1.55; }
+    .feedback-thanks::before { content:"✓"; position:absolute; left:15px; top:16px; width:23px; height:23px; display:grid; place-items:center; border-radius:50%; color:#07110b; background:var(--ok); font-weight:900; }
+    .feedback-thanks.is-celebrating::after { content:""; position:absolute; inset:-30%; pointer-events:none; background:radial-gradient(circle at 15% 20%,var(--accent) 0 2px,transparent 3px),radial-gradient(circle at 75% 30%,var(--ok) 0 2px,transparent 3px),radial-gradient(circle at 45% 80%,#d8ba70 0 2px,transparent 3px); background-size:90px 90px; animation:celebrate 1.6s ease-out both; }
 
     @keyframes feedbackPulse { 70%{box-shadow:0 0 0 10px rgba(var(--accent-rgb),0)} 100%{box-shadow:0 0 0 0 rgba(var(--accent-rgb),0)} }
+    @keyframes demoMove { 0%{transform:translateX(0)} 50%{transform:translateX(46vw)} 100%{transform:translateX(170px)} }
+    @keyframes demoClick { 0%,25%,70%,100%{transform:scale(1)} 40%,55%{transform:scale(2.2);filter:brightness(1.6)} }
+    @keyframes demoScroll { 0%{transform:translate(55px,-18px)} 50%{transform:translate(55px,18px)} 100%{transform:translate(55px,-2px)} }
+    @keyframes demoApps { 0%{transform:translateX(0)} 55%{transform:translateX(150px)} 100%{transform:translateX(112px)} }
+    @keyframes demoDesktop { 0%{transform:translate(0,0)} 35%{transform:translate(140px,0)} 70%{transform:translate(75px,-18px)} 100%{transform:translate(75px,0)} }
+    @keyframes demoZoomLeft { 0%,100%{transform:translateX(0)} 50%{transform:translateX(-46px)} }
+    @keyframes demoZoomRight { 0%,100%{transform:translateX(0)} 50%{transform:translateX(46px)} }
+    @keyframes wizardIn { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:none} }
+    @keyframes celebrate { 0%{opacity:0;transform:translateY(12px)} 30%{opacity:1} 100%{opacity:0;transform:translateY(-36px)} }
 
     @keyframes gridBreathe { 50% { opacity:.55; transform:scale(1.025); } }
     @keyframes introProgress { to { transform:scaleX(1); } }
@@ -729,6 +896,8 @@
       .guide-command-list { grid-template-columns:1fr 1fr; }
       .shortcut-grid { grid-template-columns:repeat(3,1fr); }
       .privacy-panel,.install-panel { grid-template-columns:1fr; }
+      .preflight-panel { grid-template-columns:1fr; }
+      .known-grid { grid-template-columns:1fr 1fr; }
       .privacy-visual { order:-1; }
       .faq { grid-template-columns:1fr; }
     }
@@ -736,6 +905,8 @@
       .site-header { top:10px; width:calc(100% - 20px); min-height:56px; padding:6px 7px 6px 12px; border-radius:15px; }
       .brand-mark { width:34px; height:34px; }
       .main-nav { display:none; }
+      .mobile-menu-toggle { display:grid; }
+      .header-actions > .style-action,.header-actions > .icon-action { display:none; }
       .header-action, .style-action { justify-self:end; min-height:40px; padding:0 12px; font-size:8px; }
       .style-action .style-label, .style-action .style-sep { display:none; }
       .hero { padding:118px 12px 54px; }
@@ -770,9 +941,16 @@
       .guide-panel { padding:24px 16px; }
       .guide-panel-head { align-items:start; flex-direction:column; gap:12px; }
       .gesture-card { min-height:205px; }
+      .guide-toc { top:76px; margin-inline:-2px; }
+      .command-tools { grid-template-columns:1fr; padding:11px; }
+      .command-filter-row { justify-content:flex-start; }
+      .command-results-meta { align-items:flex-start; flex-direction:column; }
       .command-group summary { padding:0 14px; }
       .guide-command-list { padding:0 14px 14px; }
+      .demo-form { grid-template-columns:1fr; }
+      .demo-form button { min-height:42px; }
       .availability { grid-template-columns:1fr; }
+      .known-grid,.legal-grid,.preflight-checks { grid-template-columns:1fr; }
       .release-panel { padding:26px; }
       .privacy-panel,.install-panel { padding:28px 20px; }
       .privacy-visual { min-height:280px; overflow:hidden; }
@@ -800,6 +978,10 @@
       .rating-options label { width:39px; height:39px; }
       .feedback-actions { display:grid; grid-template-columns:1fr 1fr; }
       .feedback-actions .feedback-send { grid-column:1/-1; }
+      .setup-overlay { padding:0; align-items:end; }
+      .setup-wizard { max-height:96svh; border-radius:24px 24px 0 0; }
+      .wizard-body { min-height:390px; padding:30px 20px; }
+      .wizard-footer { padding:14px 16px 20px; }
     }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior:auto; }
@@ -809,6 +991,7 @@
   </style>
 </head>
 <body class="intro-running" data-theme="obsidian">
+  <a class="skip-link" href="#mainContent">Skip to main content</a>
   <div class="intro is-playing" id="intro" role="dialog" aria-label="OG startup sequence" aria-modal="true">
     <div class="intro-top">
       <button class="intro-control" id="soundToggle" type="button" aria-pressed="false"><span class="signal"></span><span>SOUND · TAP</span></button>
@@ -868,12 +1051,14 @@
         <a href="#overview">Overview</a><a href="#capabilities">Capabilities</a><a href="#how-to-use">How to use</a><a href="#privacy">Privacy</a><a href="#install">Install</a>
       </nav>
       <div class="header-actions">
+        <button class="icon-action" id="replayIntro" type="button" aria-label="Replay OG intro" title="Replay intro"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.7L4 8"/><path d="M4 3v5h5"/></svg></button>
         <button class="style-action" id="changeStyle" type="button" aria-label="Change website colour style"><i aria-hidden="true"></i><span class="style-label">Change style</span><span class="style-sep">·</span><span id="styleName">Obsidian</span></button>
         <a class="header-action download-action" href="https://github.com/uvexgamerofficial-ctrl/OG-Agent/releases/download/v1.0.0-beta/OG-v1.0-beta-package.zip" aria-label="Download OG v1.0 beta for Windows from GitHub">Get beta</a>
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-label="Open navigation menu" aria-controls="mobileMenu" aria-expanded="false"><i aria-hidden="true"></i></button>
       </div>
     </header>
 
-    <main>
+    <main id="mainContent" tabindex="-1">
       <section class="hero" id="overview">
         <div class="hero-copy reveal">
           <p class="eyebrow">Private desktop intelligence</p>
@@ -1023,32 +1208,49 @@
           <p>Use the same OG actions through voice or the command console, and use the camera layer for touch-free control. Everything below reflects the v1.0-beta command set.</p>
         </div>
 
+        <nav class="guide-toc reveal" aria-label="How to use sections">
+          <a href="#guideSetup" class="is-current">Setup</a><a href="#guideGestures">Gestures</a><a href="#guideDemo">Try commands</a><a href="#guideCommands">Command library</a><a href="#install">Download</a>
+        </nav>
+
         <div class="guide-shell">
-          <div class="setup-flow" aria-label="OG setup in four steps">
+          <div class="setup-flow" id="guideSetup" aria-label="OG setup in four steps">
             <article class="setup-step reveal"><h3>Download &amp; extract</h3><p>Download the Windows ZIP and extract the complete folder. Do not run OG from inside the compressed ZIP.</p></article>
             <article class="setup-step reveal"><h3>Start all modes</h3><p>Double-click <code>Start-OG-All.bat</code> so voice, command input, gesture tracking and tray mode start together.</p></article>
             <article class="setup-step reveal"><h3>Allow permissions</h3><p>Approve microphone and camera access when Windows asks. OG needs both permissions for voice and gesture control.</p></article>
             <article class="setup-step reveal"><h3>Leave OG in the tray</h3><p>Keep the OG tray icon running. Activate it by voice, gesture or <code>Ctrl + Space</code> whenever you need it.</p></article>
           </div>
 
-          <section class="guide-panel reveal" aria-labelledby="gestureGuideTitle">
+          <section class="guide-panel reveal" id="guideGestures" aria-labelledby="gestureGuideTitle">
             <div class="guide-panel-head">
               <div><span class="guide-kicker">Gesture control · local camera</span><h3 id="gestureGuideTitle">Your hand becomes the controller.</h3></div>
               <p>Face your palm toward the camera, keep the full hand inside the frame and make one deliberate pose at a time. OG processes gesture tracking locally.</p>
             </div>
             <div class="guide-badges" aria-label="Gesture mode details"><span>Camera index 0 by default</span><span>About 150 ms tracking hold</span><span>Press Q to hide preview</span><span>Right-click disabled in beta</span></div>
             <div class="gesture-grid">
-              <article class="gesture-card"><strong>5F</strong><h4>Move the pointer</h4><p>Show one open palm with all five fingers visible, then move your hand smoothly. The mouse pointer follows your hand.</p><code>OPEN PALM → POINTER MOVE</code></article>
-              <article class="gesture-card"><strong>FST</strong><h4>Click, drag &amp; drop</h4><p>Close the same hand into a fist for left-click. Keep the fist closed while moving to drag; open it to release and drop.</p><code>FIST → CLICK / HOLD / RELEASE</code></article>
-              <article class="gesture-card"><strong>2F</strong><h4>Scroll a page</h4><p>Raise two fingers and move vertically to scroll. Moving farther beyond the scroll boundary increases the scroll speed.</p><code>TWO FINGERS ↕ SCROLL</code></article>
-              <article class="gesture-card"><strong>3F</strong><h4>Switch applications</h4><p>Use a clear three-finger horizontal swipe to move between open applications without touching Alt + Tab.</p><code>THREE-FINGER SWIPE → APP SWITCH</code></article>
-              <article class="gesture-card"><strong>4F</strong><h4>Navigate desktops</h4><p>Swipe four fingers left or right to change virtual desktops. Use a vertical four-finger swipe for Task View and desktop navigation.</p><code>FOUR-FINGER SWIPE → DESKTOP / TASK VIEW</code></article>
-              <article class="gesture-card"><strong>10F</strong><h4>Enter zoom mode</h4><p>Show two open palms and hold for about 350 ms. Move the hands apart to zoom in and together to zoom out proportionally.</p><code>TWO PALMS · 350 MS → PROPORTIONAL ZOOM</code></article>
+              <article class="gesture-card" tabindex="0"><strong>5F</strong><div class="gesture-visual" data-demo="move" aria-hidden="true"></div><h4>Move the pointer</h4><p>Show one open palm with all five fingers visible, then move your hand smoothly. The mouse pointer follows your hand.</p><code>OPEN PALM → POINTER MOVE</code><button class="gesture-play" type="button">Replay motion →</button></article>
+              <article class="gesture-card" tabindex="0"><strong>FST</strong><div class="gesture-visual" data-demo="click" aria-hidden="true"></div><h4>Click, drag &amp; drop</h4><p>Close the same hand into a fist for left-click. Keep the fist closed while moving to drag; open it to release and drop.</p><code>FIST → CLICK / HOLD / RELEASE</code><button class="gesture-play" type="button">Replay motion →</button></article>
+              <article class="gesture-card" tabindex="0"><strong>2F</strong><div class="gesture-visual" data-demo="scroll" aria-hidden="true"></div><h4>Scroll a page</h4><p>Raise two fingers and move vertically to scroll. Moving farther beyond the scroll boundary increases the scroll speed.</p><code>TWO FINGERS ↕ SCROLL</code><button class="gesture-play" type="button">Replay motion →</button></article>
+              <article class="gesture-card" tabindex="0"><strong>3F</strong><div class="gesture-visual" data-demo="apps" aria-hidden="true"></div><h4>Switch applications</h4><p>Use a clear three-finger horizontal swipe to move between open applications without touching Alt + Tab.</p><code>THREE-FINGER SWIPE → APP SWITCH</code><button class="gesture-play" type="button">Replay motion →</button></article>
+              <article class="gesture-card" tabindex="0"><strong>4F</strong><div class="gesture-visual" data-demo="desktops" aria-hidden="true"></div><h4>Navigate desktops</h4><p>Swipe four fingers left or right to change virtual desktops. Use a vertical four-finger swipe for Task View and desktop navigation.</p><code>FOUR-FINGER SWIPE → DESKTOP / TASK VIEW</code><button class="gesture-play" type="button">Replay motion →</button></article>
+              <article class="gesture-card" tabindex="0"><strong>10F</strong><div class="gesture-visual" data-demo="zoom" aria-hidden="true"></div><h4>Enter zoom mode</h4><p>Show two open palms and hold for about 350 ms. Move the hands apart to zoom in and together to zoom out proportionally.</p><code>TWO PALMS · 350 MS → PROPORTIONAL ZOOM</code><button class="gesture-play" type="button">Replay motion →</button></article>
             </div>
             <div class="guide-callout"><b>i</b><p><strong>For reliable tracking:</strong> use even front lighting, keep both wrist and fingertips visible, and avoid a busy background. If the hand disappears briefly, OG holds the last pointer position for about 150 ms. Right-click is intentionally disabled in this beta to reduce accidental actions.</p></div>
           </section>
 
-          <section class="guide-panel reveal" aria-labelledby="commandGuideTitle">
+          <section class="guide-panel reveal" id="guideDemo" aria-labelledby="demoGuideTitle">
+            <div class="guide-panel-head">
+              <div><span class="guide-kicker">Safe website simulation</span><h3 id="demoGuideTitle">Try OG before downloading.</h3></div>
+              <p>This demo explains the command flow but cannot control your PC. No command typed here leaves this page.</p>
+            </div>
+            <div class="demo-terminal" aria-label="OG command simulator">
+              <div class="demo-terminal-top"><span>OG&gt; website demo</span><small>No real actions</small></div>
+              <div class="demo-output" id="demoOutput" role="log" aria-live="polite"><div class="demo-line"><b>OG</b><span>Simulation ready. Try “open calculator”, “battery status” or “shutdown computer”.</span></div></div>
+              <form class="demo-form" id="demoForm"><label class="sr-only" for="demoInput">Enter a sample OG command</label><input id="demoInput" type="text" maxlength="80" autocomplete="off" placeholder="Type an OG command…"><button type="submit">Run demo</button></form>
+            </div>
+            <div class="demo-presets" aria-label="Example demo commands"><button type="button" data-command="help">help</button><button type="button" data-command="open calculator">open calculator</button><button type="button" data-command="show numbers">show numbers</button><button type="button" data-command="battery status">battery status</button><button type="button" data-command="shutdown computer">shutdown computer</button></div>
+          </section>
+
+          <section class="guide-panel reveal" id="guideCommands" aria-labelledby="commandGuideTitle">
             <div class="guide-panel-head">
               <div><span class="guide-kicker">Voice + command console</span><h3 id="commandGuideTitle">Say it—or type it exactly.</h3></div>
               <p>Start with short, direct phrases. The examples below can be spoken after activation or typed at the <code>OG&gt;</code> prompt. Type <code>help</code> at any time to see the active registry.</p>
@@ -1056,8 +1258,14 @@
             <div class="guide-badges"><span>Offline recognition</span><span>English beta model</span><span>Voice + typed input</span><span>Confirmation on protected actions</span></div>
             <div class="guide-callout"><b>✓</b><p><strong>Control areas in v1.0-beta:</strong> core session, apps, windows, keyboard, mouse, numbered controls, positioning grid, offline dictation, volume, brightness, battery, RAM, storage, system information, screenshots, lock and confirmed power actions, media playback, Windows settings, multi-monitor actions, time and date.</p></div>
 
+            <div class="command-tools">
+              <label class="command-search" for="commandSearch"><span>⌕</span><input id="commandSearch" type="search" autocomplete="off" placeholder="Search commands, e.g. volume or screenshot"></label>
+              <div class="command-filter-row" role="group" aria-label="Filter command categories"><button class="command-filter is-active" type="button" data-filter="all">All</button><button class="command-filter" type="button" data-filter="core">Core</button><button class="command-filter" type="button" data-filter="apps">Apps</button><button class="command-filter" type="button" data-filter="access">Access</button><button class="command-filter" type="button" data-filter="dictation">Dictation</button><button class="command-filter" type="button" data-filter="system">System</button><button class="command-filter" type="button" data-filter="power">Power</button></div>
+              <div class="command-results-meta"><span id="commandCount">47 commands shown</span><span>Tap any ⧉ button to copy an exact phrase.</span></div>
+            </div>
+
             <div class="command-library">
-              <details class="command-group" open>
+              <details class="command-group" data-category="core" open>
                 <summary>Core &amp; session controls <span>5 exact commands</span></summary>
                 <div class="guide-command-list">
                   <div class="command-item"><code>help</code><small>Show every command available in this build.</small></div>
@@ -1068,7 +1276,7 @@
                 </div>
               </details>
 
-              <details class="command-group">
+              <details class="command-group" data-category="apps">
                 <summary>Applications &amp; windows <span>launch · focus · resize · close</span></summary>
                 <div class="guide-command-list">
                   <div class="command-item"><code>open calculator</code><small>Launch an installed Windows application.</small></div>
@@ -1080,7 +1288,7 @@
                 </div>
               </details>
 
-              <details class="command-group">
+              <details class="command-group" data-category="access">
                 <summary>Keyboard, mouse &amp; accessibility <span>precise desktop control</span></summary>
                 <div class="guide-command-list">
                   <div class="command-item"><code>type hello from OG</code><small>Type text into the active application.</small></div>
@@ -1095,7 +1303,7 @@
                 </div>
               </details>
 
-              <details class="command-group">
+              <details class="command-group" data-category="dictation">
                 <summary>Offline dictation &amp; editing <span>write without the keyboard</span></summary>
                 <div class="guide-command-list">
                   <div class="command-item"><code>start dictation</code><small>Start offline text dictation.</small></div>
@@ -1110,7 +1318,7 @@
                 </div>
               </details>
 
-              <details class="command-group">
+              <details class="command-group" data-category="system">
                 <summary>System, media &amp; monitors <span>status · settings · playback</span></summary>
                 <div class="guide-command-list">
                   <div class="command-item"><code>set volume to 50</code><small>Set the Windows master volume to 50%.</small></div>
@@ -1128,7 +1336,7 @@
                 </div>
               </details>
 
-              <details class="command-group">
+              <details class="command-group" data-category="power">
                 <summary>Protected power actions <span>confirmation required</span></summary>
                 <div class="guide-command-list">
                   <div class="command-item"><code>lock computer</code><small>Lock the current Windows session.</small></div>
@@ -1140,6 +1348,7 @@
                 </div>
               </details>
             </div>
+            <div class="command-empty" id="commandEmpty" hidden>No matching command found. Try a shorter word or select “All”.</div>
 
             <div class="shortcut-grid" aria-label="OG keyboard shortcuts">
               <div class="shortcut"><kbd>Ctrl + Space</kbd><span>Activate OG</span></div>
@@ -1173,20 +1382,76 @@
         <div class="comparison-wrap reveal"><table class="comparison"><thead><tr><th>Capability</th><th>OG v1.0-beta</th><th>Cloud assistants</th><th>Basic voice tools</th></tr></thead><tbody><tr><td>Primary focus</td><td>Windows actions</td><td>General answers</td><td>Fixed commands</td></tr><tr><td>Offline-first command layer</td><td class="yes">Designed for it</td><td class="partial">Usually limited</td><td class="partial">Varies</td></tr><tr><td>Multi-step desktop workflows</td><td class="yes">Supported scope</td><td class="partial">Platform dependent</td><td>Limited</td></tr><tr><td>User-reviewed local memory</td><td class="partial">v1.0 update</td><td class="partial">Service dependent</td><td>Rare</td></tr><tr><td>Dangerous-action confirmation</td><td class="yes">Built into flow</td><td class="partial">Varies</td><td class="partial">Varies</td></tr></tbody></table></div>
       </section>
 
+      <section class="section section-rule" id="known-issues" aria-labelledby="knownIssuesTitle">
+        <div class="section-head reveal"><div><p class="section-label">Beta transparency</p><h2 id="knownIssuesTitle">Know the limits before you install.</h2></div><p>OG v1.0-beta is meant for testing. These limitations are visible here so users can decide with the correct expectations.</p></div>
+        <div class="known-grid">
+          <article class="known-item reveal"><span>Gesture beta</span><h3>Right-click is disabled.</h3><p>The current gesture layer supports pointer movement, left-click, drag, scroll, app switching, desktop navigation and zoom.</p></article>
+          <article class="known-item reveal"><span>Voice beta</span><h3>English model first.</h3><p>The included offline speech model is focused on English commands. Accent, room noise and microphone quality can affect recognition.</p></article>
+          <article class="known-item reveal"><span>Camera conditions</span><h3>Lighting matters.</h3><p>Low light, cropped fingertips or a visually busy background can reduce gesture confidence and stability.</p></article>
+          <article class="known-item reveal"><span>First launch</span><h3>Model loading takes time.</h3><p>The first start can feel slower while offline voice and gesture components initialize. Later actions should be faster.</p></article>
+          <article class="known-item reveal"><span>Large package</span><h3>About 1.18 GB.</h3><p>The beta ZIP includes offline models and runtime files. Use a stable connection and extract the full package before launching.</p></article>
+          <article class="known-item reveal"><span>Email feedback</span><h3>Attachments are manual.</h3><p>The static website prepares an email locally. If you select a screenshot or log, attach the actual file when the email draft opens.</p></article>
+        </div>
+      </section>
+
       <section class="section" id="install">
         <div class="install-panel reveal">
-          <div><p class="section-label">OG v1.0-beta</p><h2>Download the beta package.</h2><p>Get the full Windows beta build with the tray launcher, offline models, configuration files and startup helpers included. Extract the ZIP first, then run Start-OG-All.bat.</p><div class="install-actions"><a class="primary-action download-action" href="https://github.com/uvexgamerofficial-ctrl/OG-Agent/releases/download/v1.0.0-beta/OG-v1.0-beta-package.zip" aria-label="Download OG v1.0 beta for Windows from GitHub">Download for Windows ↓</a><a class="secondary-action" href="https://github.com/uvexgamerofficial-ctrl/OG-Agent/releases/tag/v1.0.0-beta" target="_blank" rel="noopener noreferrer">Release details</a></div></div>
-          <div class="install-spec"><div><span>Platform</span><strong>Windows 10 / 11</strong></div><div><span>Release</span><strong>v1.0-beta ZIP</strong></div><div><span>Command memory</span><strong>Local device</strong></div><div><span>Setup</span><strong>Extract ZIP, then Start-OG-All.bat</strong></div></div>
+          <div><p class="section-label">OG v1.0-beta</p><h2>Download the beta package.</h2><p>Get the full Windows beta build with the tray launcher, offline models, configuration files and startup helpers included. Extract the ZIP first, then run Start-OG-All.bat.</p><div class="install-actions"><a class="primary-action download-action" href="https://github.com/uvexgamerofficial-ctrl/OG-Agent/releases/download/v1.0.0-beta/OG-v1.0-beta-package.zip" aria-label="Download OG v1.0 beta for Windows from GitHub">Download 1.18 GB ↓</a><button class="secondary-action" id="openSetupWizard" type="button">Guided setup</button><a class="secondary-action" href="https://github.com/uvexgamerofficial-ctrl/OG-Agent/releases/tag/v1.0.0-beta" target="_blank" rel="noopener noreferrer">Release details</a></div><div class="download-note"><strong>Windows SmartScreen may appear</strong> because this is a new beta build. Verify that the file came from the official OG GitHub release before choosing “More info” and running it.</div></div>
+          <div class="install-spec"><div><span>Platform</span><strong>Windows 10 / 11</strong></div><div><span>Release</span><strong>v1.0-beta ZIP</strong></div><div><span>Package size</span><strong>Approximately 1.18 GB</strong></div><div><span>Published</span><strong>29 August 2026</strong></div><div><span>Processing</span><strong>Offline models included</strong></div><div><span>Setup</span><strong>Extract, then Start-OG-All.bat</strong></div></div>
+        </div>
+        <div class="preflight-panel reveal" aria-labelledby="preflightTitle">
+          <div class="preflight-copy"><p class="section-label">Before downloading</p><h3 id="preflightTitle">Quick compatibility check.</h3><p>The browser can check your platform and whether camera/microphone testing is available. RAM information is approximate and may not be reported by every browser.</p><div class="preflight-actions"><button id="runCompatibility" type="button">Run quick check</button><button id="testDevices" type="button">Test camera + mic</button></div></div>
+          <div class="preflight-checks" id="preflightChecks" aria-live="polite">
+            <div class="preflight-check" data-check="platform"><span>Operating system</span><strong>Not checked</strong></div>
+            <div class="preflight-check" data-check="memory"><span>Device memory</span><strong>Not checked</strong></div>
+            <div class="preflight-check" data-check="secure"><span>Secure website</span><strong>Not checked</strong></div>
+            <div class="preflight-check" data-check="media"><span>Camera + microphone</span><strong>Permission not tested</strong></div>
+          </div>
         </div>
         <div class="faq">
           <article class="reveal"><h3>Does this page need internet?</h3><p>No. The logo, styles and animation logic are embedded in this single file, so the experience can open locally.</p></article>
-          <article class="reveal"><h3>Can the intro be skipped?</h3><p>Yes. The full intro starts automatically on every fresh open, while the Skip Intro control remains available.</p></article>
+          <article class="reveal"><h3>Can the intro be skipped or replayed?</h3><p>Yes. It plays automatically on the first visit in a tab. Refresh returns you to the same page position, and Replay Intro is always available.</p></article>
           <article class="reveal"><h3>How do I install OG?</h3><p>Download the beta ZIP, extract it, run Start-OG-All.bat, then allow microphone and camera permissions when Windows asks.</p></article>
+        </div>
+      </section>
+
+      <section class="section section-rule" id="legal" aria-labelledby="legalTitle">
+        <div class="section-head reveal"><div><p class="section-label">Clear policies</p><h2 id="legalTitle">Privacy, terms and support.</h2></div><p>This static beta page does not use advertising pixels or silent uploads. The policies below explain the current website and OG beta behavior.</p></div>
+        <div class="legal-grid">
+          <details class="legal-card reveal"><summary>Privacy Policy</summary><div class="legal-body"><p>OG is designed for local voice, camera and command processing. This website does not receive microphone recordings, camera video, personal files or OG command history.</p><p>Feedback text is prepared locally and only leaves your device when you approve an email. External download and email links are handled by GitHub or your email provider under their own policies.</p></div></details>
+          <details class="legal-card reveal"><summary>Terms &amp; Beta Conditions</summary><div class="legal-body"><p>OG v1.0-beta is pre-release software provided for testing. Features may be incomplete, change or fail. Review protected commands carefully and keep backups of important work.</p><p>You are responsible for commands executed on your computer. Do not use OG to access systems, accounts or data without permission.</p></div></details>
+          <details class="legal-card reveal"><summary>Cookies &amp; Local Storage</summary><div class="legal-body"><p>This version uses no advertising cookies or analytics trackers. Small browser-storage entries remember the intro state, selected visual style, setup progress, scroll position and feedback draft on your own device.</p><p>If analytics or non-essential cookies are added later, this policy and consent controls must be updated first.</p></div></details>
+          <details class="legal-card reveal"><summary>Contact &amp; Support</summary><div class="legal-body"><p>For installation problems, beta bugs or privacy questions, email <a href="mailto:ganeshpandey22082011@gmail.com">ganeshpandey22082011@gmail.com</a>.</p><p>You can also use the Beta Feedback button to generate a structured report with an issue reference.</p></div></details>
         </div>
       </section>
     </main>
 
-    <footer class="site-footer"><div class="footer-brand"><span class="mini-logo" aria-hidden="true"></span><span>OG · Local command intelligence</span></div><span>Private by design · v1.0-beta</span></footer>
+    <footer class="site-footer"><div class="footer-brand"><span class="mini-logo" aria-hidden="true"></span><span>OG · Local command intelligence</span></div><nav class="footer-links" aria-label="Footer navigation"><a href="#how-to-use">Guide</a><a href="#known-issues">Known issues</a><a href="#legal">Privacy &amp; terms</a><a href="mailto:ganeshpandey22082011@gmail.com">Contact</a><button id="footerReplayIntro" type="button">Replay intro</button></nav><span>Private by design · v1.0-beta</span></footer>
+  </div>
+
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <section class="mobile-menu-panel" role="dialog" aria-modal="true" aria-label="OG navigation">
+      <div class="mobile-menu-head"><div><strong>Navigate OG</strong><span>v1.0-beta</span></div><button class="setup-close" id="mobileMenuClose" type="button" aria-label="Close navigation menu">×</button></div>
+      <nav class="mobile-menu-nav"><a href="#overview">Overview</a><a href="#capabilities">Capabilities</a><a href="#how-to-use">How to use</a><a href="#guideGestures">Gesture guide</a><a href="#guideCommands">Command library</a><a href="#known-issues">Known issues</a><a href="#install">Download</a><a href="#legal">Privacy &amp; terms</a></nav>
+      <div class="mobile-menu-actions"><button id="mobileStyleAction" type="button">Change style</button><button id="mobileReplayIntro" type="button">Replay intro</button></div>
+    </section>
+  </div>
+
+  <div class="setup-overlay" id="setupOverlay" aria-hidden="true">
+    <section class="setup-wizard" id="setupWizard" role="dialog" aria-modal="true" aria-labelledby="setupWizardTitle">
+      <header class="setup-wizard-head"><div><strong id="setupWizardTitle">Install OG correctly</strong><span id="wizardStepLabel">Step 1 of 7</span></div><button class="setup-close" id="setupClose" type="button" aria-label="Close setup guide">×</button></header>
+      <div class="wizard-progress" aria-hidden="true"><i id="wizardProgress"></i></div>
+      <div class="wizard-body">
+        <article class="wizard-step is-active" data-step="0"><small>01 · Download</small><h3>Get the complete beta package.</h3><p>Download the approximately 1.18 GB ZIP from the official OG GitHub release. A stable connection is recommended because offline models are included.</p><a class="primary-action download-action" href="https://github.com/uvexgamerofficial-ctrl/OG-Agent/releases/download/v1.0.0-beta/OG-v1.0-beta-package.zip">Download OG ↓</a><div class="wizard-tip">Keep the ZIP until you confirm that the extracted copy starts correctly.</div></article>
+        <article class="wizard-step" data-step="1"><small>02 · Extract</small><h3>Do not run it inside the ZIP.</h3><p>Right-click the downloaded ZIP, choose <strong>Extract All</strong>, select a folder with enough free space and wait for extraction to finish.</p><div class="wizard-tip">Moving or deleting individual files can break the bundled runtime and offline models.</div></article>
+        <article class="wizard-step" data-step="2"><small>03 · Launch</small><h3>Start voice, gesture and tray together.</h3><p>Open the extracted folder and double-click <code>Start-OG-All.bat</code>. The first launch may take longer while the included models initialize.</p><div class="wizard-tip">If Windows SmartScreen appears, first verify that the package came from the official OG GitHub release.</div></article>
+        <article class="wizard-step" data-step="3"><small>04 · Permissions</small><h3>Allow microphone and camera access.</h3><p>Microphone access enables offline voice commands. Camera access enables local hand tracking. OG cannot provide those controls when permission is denied.</p><div class="wizard-tip">Camera frames and microphone processing are designed to stay on the device in this beta.</div></article>
+        <article class="wizard-step" data-step="4"><small>05 · Tray mode</small><h3>Look for the OG tray icon.</h3><p>Once OG is running, leave it in the Windows system tray. This keeps the assistant available without leaving a large window open.</p><div class="wizard-tip">Use the tray menu to open status, restart components or exit OG safely.</div></article>
+        <article class="wizard-step" data-step="5"><small>06 · Test</small><h3>Verify one input at a time.</h3><p>Press <code>Ctrl + Space</code>, then try <code>status</code> and <code>open calculator</code>. After voice works, show one open palm and verify pointer movement.</p><div class="wizard-tip">If several apps match, choose the displayed option with Ctrl + Alt + 1…5 or type the number.</div></article>
+        <article class="wizard-step" data-step="6"><small>07 · Ready</small><h3>OG is ready for beta testing.</h3><p>Keep the command guide nearby, test normal workflows and use the feedback button whenever a command or gesture behaves incorrectly.</p><div class="wizard-tip">For automatic startup, enable the included startup option only after the manual launch works reliably on your PC.</div></article>
+      </div>
+      <footer class="wizard-footer"><button id="wizardBack" type="button">← Back</button><button id="wizardNext" type="button">Next step →</button></footer>
+    </section>
   </div>
 
   <button class="feedback-trigger" id="feedbackTrigger" type="button" aria-haspopup="dialog" aria-controls="feedbackOverlay" disabled>
@@ -1249,7 +1514,10 @@
           <button class="feedback-send" type="submit">Send via email →</button>
           <button class="feedback-gmail" id="openGmail" type="button">Open Gmail</button>
           <button class="feedback-copy" id="copyFeedback" type="button">Copy report</button>
+          <button class="feedback-copy" id="clearFeedbackDraft" type="button">Clear draft</button>
         </div>
+        <p class="feedback-draft" id="feedbackDraftStatus" aria-live="polite">Drafts are saved only in this browser.</p>
+        <div class="feedback-thanks" id="feedbackThanks" hidden><strong>Thank you for improving OG.</strong> Your report is ready. Review the email draft, attach any selected file, then press Send.</div>
         <p class="feedback-privacy">Your feedback is prepared locally in this browser and sent only when you approve the email. Nothing is silently uploaded.</p>
       </form>
     </section>
@@ -1367,6 +1635,22 @@
     try { sessionStorage.setItem(key, JSON.stringify(value)); } catch (_) { /* In-memory fallback remains active. */ }
   }
 
+  function persistentGet(key, fallback) {
+    try {
+      const value = localStorage.getItem(key);
+      return value === null ? fallback : JSON.parse(value);
+    } catch (_) { return fallback; }
+  }
+
+  function persistentSet(key, value) {
+    try { localStorage.setItem(key, JSON.stringify(value)); return true; }
+    catch (_) { return false; }
+  }
+
+  function persistentRemove(key) {
+    try { localStorage.removeItem(key); } catch (_) { /* Storage can be blocked in privacy modes. */ }
+  }
+
   function shuffle(items) {
     const result = [...items];
     for (let index = result.length - 1; index > 0; index -= 1) {
@@ -1399,7 +1683,7 @@
   let audioContext = null;
   let audioMaster = null;
   let audioNodes = [];
-  let soundEnabled = false;
+  let soundEnabled = storageGet("og-sound-enabled", false);
   let introActive = true;
   let voicePlayed = false;
 
@@ -1536,6 +1820,8 @@
   function finishIntro() {
     if (!introActive) return;
     introActive = false;
+    storageSet("og-intro-seen", true);
+    storageSet("og-active-theme", activeTheme.key);
     clearIntroTimers();
     intro.classList.add("is-complete");
     body.classList.remove("intro-running");
@@ -1548,6 +1834,28 @@
       renderDeck({ scrollMobile: mobileLayout.matches });
       $("#commandStage").focus({ preventScroll: true });
     }, 760);
+  }
+
+  function showSiteImmediately({ restoreScroll = true } = {}) {
+    clearIntroTimers();
+    stopAmbient(true);
+    introActive = false;
+    intro.hidden = true;
+    intro.classList.add("is-complete");
+    body.classList.remove("intro-running");
+    site.setAttribute("aria-hidden", "false");
+    site.inert = false;
+    feedbackTrigger.disabled = false;
+    const storedTheme = storageGet("og-active-theme", storageGet("og-last-theme", themeProtocols[0].key));
+    activeTheme = themeProtocols.find(theme => theme.key === storedTheme) || themeProtocols[0];
+    body.dataset.theme = activeTheme.key;
+    styleName.textContent = activeTheme.name;
+    themeLabel.textContent = `${activeTheme.code} / ${activeTheme.name} protocol`;
+    renderDeck({ scrollMobile: false });
+    if (restoreScroll && !location.hash) {
+      const savedScroll = Number(storageGet("og-scroll-y", 0));
+      if (Number.isFinite(savedScroll) && savedScroll > 0) requestAnimationFrame(() => window.scrollTo({ top: savedScroll, behavior: "auto" }));
+    }
   }
 
   function startIntro() {
@@ -1583,6 +1891,7 @@
 
   soundToggle.addEventListener("click", async () => {
     soundEnabled = !soundEnabled;
+    storageSet("og-sound-enabled", soundEnabled);
     updateSoundButton();
     if (soundEnabled) {
       await startAmbient();
@@ -1833,6 +2142,321 @@
     toastTimer = window.setTimeout(() => toast.classList.remove("is-visible"), 3200);
   }
 
+  /* Mobile navigation and intro replay */
+  const mobileMenu = $("#mobileMenu");
+  const mobileMenuPanel = $(".mobile-menu-panel", mobileMenu);
+  const mobileMenuToggle = $("#mobileMenuToggle");
+  const mobileMenuClose = $("#mobileMenuClose");
+  const replayIntroButton = $("#replayIntro");
+  const footerReplayIntro = $("#footerReplayIntro");
+  const mobileReplayIntro = $("#mobileReplayIntro");
+  const mobileStyleAction = $("#mobileStyleAction");
+  let mobileMenuLastFocus = null;
+
+  function openMobileMenu() {
+    if (introActive) return;
+    if (typeof closeSetupWizard === "function") closeSetupWizard(false);
+    if (typeof closeFeedbackForm === "function") closeFeedbackForm(false);
+    mobileMenuLastFocus = document.activeElement;
+    mobileMenu.classList.add("is-open");
+    mobileMenu.setAttribute("aria-hidden", "false");
+    mobileMenuToggle.setAttribute("aria-expanded", "true");
+    mobileMenuToggle.setAttribute("aria-label", "Close navigation menu");
+    body.classList.add("mobile-menu-open");
+    site.inert = true;
+    feedbackTrigger.disabled = true;
+    window.setTimeout(() => $("a", mobileMenuPanel)?.focus({ preventScroll:true }), reducedMotion.matches ? 0 : 220);
+  }
+
+  function closeMobileMenu(restoreFocus = true) {
+    if (!mobileMenu.classList.contains("is-open")) return;
+    mobileMenu.classList.remove("is-open");
+    mobileMenu.setAttribute("aria-hidden", "true");
+    mobileMenuToggle.setAttribute("aria-expanded", "false");
+    mobileMenuToggle.setAttribute("aria-label", "Open navigation menu");
+    body.classList.remove("mobile-menu-open");
+    site.inert = introActive;
+    feedbackTrigger.disabled = introActive;
+    if (restoreFocus) window.setTimeout(() => (mobileMenuLastFocus || mobileMenuToggle).focus({ preventScroll:true }), reducedMotion.matches ? 0 : 180);
+  }
+
+  function replayIntroSequence() {
+    closeMobileMenu(false);
+    if (typeof closeSetupWizard === "function") closeSetupWizard(false);
+    if (typeof closeFeedbackForm === "function") closeFeedbackForm(false);
+    window.scrollTo({ top:0, behavior:"auto" });
+    startIntro();
+  }
+
+  mobileMenuToggle.addEventListener("click", () => mobileMenu.classList.contains("is-open") ? closeMobileMenu() : openMobileMenu());
+  mobileMenuClose.addEventListener("click", () => closeMobileMenu());
+  mobileMenu.addEventListener("pointerdown", event => { if (event.target === mobileMenu) closeMobileMenu(); });
+  $$("a", mobileMenuPanel).forEach(link => link.addEventListener("click", () => closeMobileMenu(false)));
+  mobileStyleAction.addEventListener("click", () => { changeStyle.click(); closeMobileMenu(false); });
+  [replayIntroButton, footerReplayIntro, mobileReplayIntro].forEach(button => button.addEventListener("click", replayIntroSequence));
+  mobileMenu.addEventListener("keydown", event => {
+    if (event.key === "Escape") { event.preventDefault(); closeMobileMenu(); return; }
+    if (event.key !== "Tab") return;
+    const focusable = $$("button,[href],[tabindex]:not([tabindex='-1'])", mobileMenuPanel).filter(element => !element.disabled);
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+  });
+
+  /* Gesture motion explainers */
+  function replayGesture(card) {
+    card.classList.remove("is-demonstrating");
+    void card.offsetWidth;
+    card.classList.add("is-demonstrating");
+    window.setTimeout(() => card.classList.remove("is-demonstrating"), 1750);
+  }
+  $$(".gesture-card").forEach(card => {
+    $(".gesture-play", card)?.addEventListener("click", () => replayGesture(card));
+    card.addEventListener("keydown", event => {
+      if (event.target === card && (event.key === "Enter" || event.key === " ")) { event.preventDefault(); replayGesture(card); }
+    });
+  });
+
+  /* Sticky guide navigation */
+  const guideLinks = $$(".guide-toc a");
+  const guideTargets = guideLinks.map(link => $(link.getAttribute("href"))).filter(Boolean);
+  if ("IntersectionObserver" in window) {
+    const guideObserver = new IntersectionObserver(entries => {
+      const visible = entries.filter(entry => entry.isIntersecting).sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (!visible) return;
+      guideLinks.forEach(link => link.classList.toggle("is-current", link.getAttribute("href") === `#${visible.target.id}`));
+    }, { rootMargin:"-22% 0px -62%", threshold:[0,.15,.4] });
+    guideTargets.forEach(target => guideObserver.observe(target));
+  }
+
+  /* Searchable and copyable command library */
+  const commandSearch = $("#commandSearch");
+  const commandFilters = $$(".command-filter");
+  const commandGroups = $$(".command-group");
+  const commandItems = $$(".command-item");
+  const commandCount = $("#commandCount");
+  const commandEmpty = $("#commandEmpty");
+  let activeCommandFilter = "all";
+
+  async function copyText(text) {
+    try { await navigator.clipboard.writeText(text); return true; }
+    catch (_) {
+      const area = document.createElement("textarea");
+      area.value = text;
+      area.setAttribute("readonly", "");
+      area.style.cssText = "position:fixed;opacity:0;pointer-events:none";
+      document.body.appendChild(area);
+      area.select();
+      const copied = document.execCommand("copy");
+      area.remove();
+      return copied;
+    }
+  }
+
+  commandItems.forEach(item => {
+    const phrase = $("code", item)?.textContent.trim() || "";
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "command-copy";
+    button.textContent = "⧉";
+    button.setAttribute("aria-label", `Copy command: ${phrase}`);
+    button.addEventListener("click", async () => showToast(await copyText(phrase) ? `Copied: ${phrase}` : "Copy failed."));
+    item.appendChild(button);
+  });
+
+  function updateCommandLibrary() {
+    const query = commandSearch.value.trim().toLocaleLowerCase();
+    let visibleCount = 0;
+    commandGroups.forEach(group => {
+      const categoryMatch = activeCommandFilter === "all" || group.dataset.category === activeCommandFilter;
+      let groupVisible = 0;
+      $$(".command-item", group).forEach(item => {
+        const textMatch = !query || item.textContent.toLocaleLowerCase().includes(query);
+        const visible = categoryMatch && textMatch;
+        item.hidden = !visible;
+        if (visible) { visibleCount += 1; groupVisible += 1; }
+      });
+      group.hidden = groupVisible === 0;
+      if (query && groupVisible) group.open = true;
+    });
+    commandCount.textContent = `${visibleCount} command${visibleCount === 1 ? "" : "s"} shown`;
+    commandEmpty.hidden = visibleCount !== 0;
+  }
+
+  commandSearch.addEventListener("input", updateCommandLibrary);
+  commandFilters.forEach(button => button.addEventListener("click", () => {
+    activeCommandFilter = button.dataset.filter;
+    commandFilters.forEach(item => item.classList.toggle("is-active", item === button));
+    updateCommandLibrary();
+  }));
+  document.addEventListener("keydown", event => {
+    const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName || "");
+    if (event.key === "/" && !typing && !introActive) { event.preventDefault(); commandSearch.focus(); }
+  });
+  updateCommandLibrary();
+
+  /* Safe command simulator */
+  const demoForm = $("#demoForm");
+  const demoInput = $("#demoInput");
+  const demoOutput = $("#demoOutput");
+  let demoPending = null;
+
+  function addDemoLine(author, message, type = "") {
+    const line = document.createElement("div");
+    line.className = `demo-line ${type}`.trim();
+    const label = document.createElement("b");
+    const copy = document.createElement("span");
+    label.textContent = author;
+    copy.textContent = message;
+    line.append(label, copy);
+    demoOutput.appendChild(line);
+    while (demoOutput.children.length > 24) demoOutput.firstElementChild.remove();
+    demoOutput.scrollTop = demoOutput.scrollHeight;
+  }
+
+  function runDemoCommand(rawCommand) {
+    const original = String(rawCommand || "").trim();
+    if (!original) return;
+    const command = original.toLocaleLowerCase().replace(/[.!?]+$/g, "");
+    addDemoLine("YOU", original);
+    if (/^[1-5]$/.test(command) && demoPending === "window") {
+      addDemoLine("OG", `Option ${command} selected. Matching window would be maximized in the real app.`, "success");
+      demoPending = null;
+    } else if (command === "confirm" && demoPending === "power") {
+      addDemoLine("OG", "Protected action confirmed in simulation. No real shutdown was performed.", "success");
+      demoPending = null;
+    } else if (command === "cancel" && demoPending) {
+      addDemoLine("OG", "Pending simulated action cancelled.", "success");
+      demoPending = null;
+    } else if (command === "help") addDemoLine("OG", "Try app, window, accessibility, dictation, system, media or power commands. The installed build shows the full registry.", "success");
+    else if (command === "status") addDemoLine("OG", "v1.0-beta · offline mode · voice ready · gestures ready · tray active", "success");
+    else if (/^open (calculator|notepad|camera|chrome)$/.test(command)) addDemoLine("OG", `${original.slice(5)} would open on the Windows desktop.`, "success");
+    else if (command === "maximize whatsapp") { addDemoLine("OG", "Multiple WhatsApp windows may match. Choose option 1–5.", "warning"); demoPending = "window"; }
+    else if (command === "show numbers") addDemoLine("OG", "Number labels would appear over clickable controls in the active window.", "success");
+    else if (/^click \d+$/.test(command)) addDemoLine("OG", `The numbered control ${command.split(" ")[1]} would be clicked.`, "success");
+    else if (command === "battery status") addDemoLine("OG", "The installed app would report battery percentage and charging state.", "success");
+    else if (/^set volume to \d{1,3}$/.test(command)) addDemoLine("OG", "Master volume would be updated after validating the requested percentage.", "success");
+    else if (/^(shutdown|restart|sleep) computer$/.test(command)) { addDemoLine("OG", "Protected power action pending. Say or type confirm, or cancel.", "warning"); demoPending = "power"; }
+    else addDemoLine("OG", "This phrase is outside the website demo. Type help or check the command library below.", "error");
+  }
+
+  demoForm.addEventListener("submit", event => { event.preventDefault(); runDemoCommand(demoInput.value); demoInput.value = ""; demoInput.focus(); });
+  $$(".demo-presets button").forEach(button => button.addEventListener("click", () => runDemoCommand(button.dataset.command)));
+
+  /* Guided installation modal */
+  const setupOverlay = $("#setupOverlay");
+  const setupWizard = $("#setupWizard");
+  const setupClose = $("#setupClose");
+  const openSetupWizardButton = $("#openSetupWizard");
+  const wizardSteps = $$(".wizard-step", setupWizard);
+  const wizardBack = $("#wizardBack");
+  const wizardNext = $("#wizardNext");
+  const wizardStepLabel = $("#wizardStepLabel");
+  const wizardProgress = $("#wizardProgress");
+  let wizardIndex = Math.max(0, Math.min(wizardSteps.length - 1, Number(storageGet("og-setup-step", 0)) || 0));
+  let setupLastFocus = null;
+
+  function renderWizard() {
+    wizardSteps.forEach((step,index) => step.classList.toggle("is-active", index === wizardIndex));
+    wizardStepLabel.textContent = `Step ${wizardIndex + 1} of ${wizardSteps.length}`;
+    wizardProgress.style.setProperty("--progress", `${((wizardIndex + 1) / wizardSteps.length) * 100}%`);
+    wizardBack.disabled = wizardIndex === 0;
+    wizardNext.textContent = wizardIndex === wizardSteps.length - 1 ? "Finish setup ✓" : "Next step →";
+    storageSet("og-setup-step", wizardIndex);
+  }
+
+  function openSetupWizard() {
+    if (introActive) return;
+    closeMobileMenu(false);
+    if (typeof closeFeedbackForm === "function") closeFeedbackForm(false);
+    setupLastFocus = document.activeElement;
+    renderWizard();
+    setupOverlay.classList.add("is-open");
+    setupOverlay.setAttribute("aria-hidden", "false");
+    body.classList.add("setup-open");
+    site.inert = true;
+    feedbackTrigger.disabled = true;
+    window.setTimeout(() => setupClose.focus({ preventScroll:true }), reducedMotion.matches ? 0 : 240);
+  }
+
+  function closeSetupWizard(restoreFocus = true) {
+    if (!setupOverlay.classList.contains("is-open")) return;
+    setupOverlay.classList.remove("is-open");
+    setupOverlay.setAttribute("aria-hidden", "true");
+    body.classList.remove("setup-open");
+    site.inert = introActive;
+    feedbackTrigger.disabled = introActive;
+    if (restoreFocus) window.setTimeout(() => (setupLastFocus || openSetupWizardButton).focus({ preventScroll:true }), reducedMotion.matches ? 0 : 180);
+  }
+
+  openSetupWizardButton.addEventListener("click", openSetupWizard);
+  setupClose.addEventListener("click", () => closeSetupWizard());
+  setupOverlay.addEventListener("pointerdown", event => { if (event.target === setupOverlay) closeSetupWizard(); });
+  wizardBack.addEventListener("click", () => { wizardIndex = Math.max(0, wizardIndex - 1); renderWizard(); });
+  wizardNext.addEventListener("click", () => {
+    if (wizardIndex < wizardSteps.length - 1) { wizardIndex += 1; renderWizard(); return; }
+    storageSet("og-setup-complete", true);
+    closeSetupWizard();
+    showToast("Setup guide complete — OG is ready for beta testing.");
+  });
+  setupOverlay.addEventListener("keydown", event => {
+    if (event.key === "Escape") { event.preventDefault(); closeSetupWizard(); return; }
+    if (event.key !== "Tab") return;
+    const focusable = $$("button,[href],[tabindex]:not([tabindex='-1'])", setupWizard).filter(element => !element.disabled && element.offsetParent !== null);
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+  });
+  renderWizard();
+
+  /* Browser-side compatibility pre-check */
+  const runCompatibility = $("#runCompatibility");
+  const testDevices = $("#testDevices");
+  function setPreflight(name, state, message) {
+    const item = $(`[data-check='${name}']`);
+    item.classList.remove("pass", "warn", "fail");
+    item.classList.add(state);
+    $("strong", item).textContent = message;
+  }
+
+  runCompatibility.addEventListener("click", () => {
+    const platform = navigator.userAgentData?.platform || navigator.platform || navigator.userAgent || "Unknown";
+    const windows = /win/i.test(platform) || /windows/i.test(navigator.userAgent);
+    setPreflight("platform", windows ? "pass" : "fail", windows ? "Windows detected" : `${platform} — OG beta requires Windows`);
+    const memory = Number(navigator.deviceMemory || 0);
+    setPreflight("memory", memory >= 4 ? "pass" : "warn", memory ? `Approximately ${memory} GB reported` : "Browser did not report RAM");
+    setPreflight("secure", window.isSecureContext ? "pass" : "warn", window.isSecureContext ? "HTTPS / secure context" : "Open the hosted HTTPS page for device tests");
+    const mediaReady = Boolean(navigator.mediaDevices?.getUserMedia);
+    setPreflight("media", mediaReady ? "warn" : "fail", mediaReady ? "Device test available — permission not requested" : "Camera/microphone API unavailable");
+    showToast(windows ? "Quick check complete. You can test camera and microphone separately." : "OG v1.0-beta currently requires Windows 10 or 11.");
+  });
+
+  testDevices.addEventListener("click", async () => {
+    if (!navigator.mediaDevices?.getUserMedia || !window.isSecureContext) {
+      setPreflight("media", "fail", "Use the hosted HTTPS page to test permissions");
+      return;
+    }
+    testDevices.disabled = true;
+    testDevices.textContent = "Waiting for permission…";
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio:true, video:true });
+      const hasAudio = stream.getAudioTracks().length > 0;
+      const hasVideo = stream.getVideoTracks().length > 0;
+      stream.getTracks().forEach(track => track.stop());
+      setPreflight("media", hasAudio && hasVideo ? "pass" : "warn", hasAudio && hasVideo ? "Camera and microphone permission granted" : "Only one requested device was available");
+      showToast("Device test complete. The preview was not recorded or uploaded.");
+    } catch (error) {
+      const denied = error?.name === "NotAllowedError";
+      setPreflight("media", denied ? "fail" : "warn", denied ? "Permission denied — enable camera and microphone" : "Device test failed or a device is busy");
+      showToast(denied ? "Permission was denied. You can change it in browser site settings." : "Could not access both devices.");
+    } finally {
+      testDevices.disabled = false;
+      testDevices.textContent = "Test camera + mic";
+    }
+  });
+
   /* Email-based beta feedback */
   const feedbackAddress = ["ganeshpandey22082011", "gmail.com"].join("@");
   const feedbackOverlay = $("#feedbackOverlay");
@@ -1841,9 +2465,54 @@
   const feedbackForm = $("#feedbackForm");
   const openGmail = $("#openGmail");
   const copyFeedback = $("#copyFeedback");
+  const clearFeedbackDraft = $("#clearFeedbackDraft");
+  const feedbackDraftStatus = $("#feedbackDraftStatus");
+  const feedbackThanks = $("#feedbackThanks");
   const feedbackScreenshot = $("#feedbackScreenshot");
   let feedbackLastFocus = null;
   let feedbackReference = "";
+  let feedbackDraftTimer = null;
+  const feedbackDraftKey = "og-feedback-draft-v1";
+
+  function feedbackDraftControls() {
+    return $$("input,select,textarea", feedbackForm).filter(control => control.type !== "file" && control.name);
+  }
+
+  function saveFeedbackDraft() {
+    const draft = {};
+    feedbackDraftControls().forEach(control => {
+      if (control.type === "radio") { if (control.checked) draft[control.name] = control.value; }
+      else if (control.type === "checkbox") draft[control.name] = control.checked;
+      else draft[control.name] = control.value;
+    });
+    const saved = persistentSet(feedbackDraftKey, draft);
+    feedbackDraftStatus.textContent = saved ? `Draft saved locally · ${new Date().toLocaleTimeString([], { hour:"2-digit", minute:"2-digit" })}` : "Draft could not be saved in this browser mode.";
+  }
+
+  function scheduleFeedbackDraftSave() {
+    clearTimeout(feedbackDraftTimer);
+    feedbackDraftStatus.textContent = "Saving draft locally…";
+    feedbackDraftTimer = window.setTimeout(saveFeedbackDraft, 420);
+  }
+
+  function restoreFeedbackDraft() {
+    const draft = persistentGet(feedbackDraftKey, null);
+    if (!draft || typeof draft !== "object") return;
+    feedbackDraftControls().forEach(control => {
+      if (!(control.name in draft)) return;
+      if (control.type === "radio") control.checked = draft[control.name] === control.value;
+      else if (control.type === "checkbox") control.checked = Boolean(draft[control.name]);
+      else control.value = String(draft[control.name] ?? "");
+    });
+    feedbackDraftStatus.textContent = "Local feedback draft restored.";
+  }
+
+  function showFeedbackReady() {
+    feedbackThanks.hidden = false;
+    feedbackThanks.classList.remove("is-celebrating");
+    void feedbackThanks.offsetWidth;
+    feedbackThanks.classList.add("is-celebrating");
+  }
 
   function createFeedbackReference() {
     const date = new Date().toISOString().slice(0, 10).replaceAll("-", "");
@@ -1978,6 +2647,7 @@
     const email = limitedEmailBody(feedback.report, 3600);
     if (email.truncated) await copyReportText(feedback.report, true);
     const mailto = `mailto:${feedbackAddress}?subject=${encodeURIComponent(feedback.subject)}&body=${encodeURIComponent(email.body)}`;
+    showFeedbackReady();
     showToast(email.truncated ? "Email opened; full report also copied." : "Email draft prepared — review it, then press Send.");
     window.location.href = mailto;
   });
@@ -1989,6 +2659,7 @@
     if (email.truncated) copyReportText(feedback.report, true);
     const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(feedbackAddress)}&su=${encodeURIComponent(feedback.subject)}&body=${encodeURIComponent(email.body)}`;
     const emailWindow = window.open(gmailUrl, "_blank", "noopener,noreferrer");
+    showFeedbackReady();
     showToast(emailWindow ? "Gmail draft opened — review it, then press Send." : "Popup blocked. Allow popups or use Send via email.");
   });
 
@@ -1996,6 +2667,18 @@
     const feedback = buildFeedbackPackage();
     if (feedback) await copyReportText(feedback.report);
   });
+
+  feedbackForm.addEventListener("input", scheduleFeedbackDraftSave);
+  feedbackForm.addEventListener("change", scheduleFeedbackDraftSave);
+  clearFeedbackDraft.addEventListener("click", () => {
+    clearTimeout(feedbackDraftTimer);
+    feedbackForm.reset();
+    persistentRemove(feedbackDraftKey);
+    feedbackThanks.hidden = true;
+    feedbackDraftStatus.textContent = "Draft cleared. Nothing was uploaded.";
+    showToast("Local feedback draft cleared.");
+  });
+  restoreFeedbackDraft();
 
   feedbackOverlay.addEventListener("keydown", event => {
     if (event.key === "Escape") {
@@ -2017,7 +2700,10 @@
     }
   });
 
-  $$(".download-action").forEach(link => link.addEventListener("click", () => showToast("Downloading OG v1.0-beta from GitHub. Extract the ZIP before running.")));
+  $$(".download-action").forEach(link => link.addEventListener("click", () => {
+    storageSet("og-download-started", true);
+    showToast("1.18 GB beta download starting from GitHub. Extract the complete ZIP before running OG.");
+  }));
 
   changeStyle.addEventListener("click", () => {
     const currentIndex = themeProtocols.findIndex(theme => theme.key === activeTheme.key);
@@ -2027,6 +2713,7 @@
       body.dataset.theme = nextStyle.key;
       styleName.textContent = nextStyle.name;
       themeLabel.textContent = `${nextStyle.code} / ${nextStyle.name} protocol`;
+      storageSet("og-active-theme", nextStyle.key);
       changeStyle.setAttribute("aria-label", `Current style ${nextStyle.name}. Change website colour style`);
     };
     if (typeof document.startViewTransition === "function" && !reducedMotion.matches) {
@@ -2079,11 +2766,13 @@
   });
 
   document.addEventListener("visibilitychange", () => {
+    body.classList.toggle("page-hidden", document.hidden);
     if (document.hidden && window.speechSynthesis) window.speechSynthesis.cancel();
   });
 
   function autoStartIntro() {
-    startIntro();
+    if (storageGet("og-intro-seen", false)) showSiteImmediately();
+    else startIntro();
   }
 
   if (document.readyState === "loading") {
@@ -2091,8 +2780,9 @@
   } else {
     requestAnimationFrame(autoStartIntro);
   }
+  window.addEventListener("pagehide", () => storageSet("og-scroll-y", Math.max(0, window.scrollY)));
   window.addEventListener("pageshow", event => {
-    if (event.persisted) startIntro();
+    if (event.persisted) showSiteImmediately();
   });
 })();
   </script>
