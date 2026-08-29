@@ -4,8 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#070706">
-  <meta name="description" content="OG is a private, local-first command interface for Windows.">
-  <title>OG — Local Command Intelligence</title>
+  <meta name="description" content="Learn how to use OG v1.0-beta, an offline voice and gesture PC assistant for Windows. Explore gestures, exact commands, dictation, overlays and system controls.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://uvexgamerofficial-ctrl.github.io/OG-Agent/">
+  <title>How to Use OG — Voice & Gesture PC Assistant</title>
   <style>
     :root {
       color-scheme: dark;
@@ -527,6 +529,45 @@
     .capability small { color:var(--accent); font:600 8px/1 var(--mono); letter-spacing:.18em; text-transform:uppercase; }
     .capability h3 { max-width:420px; margin:72px 0 11px; font:400 clamp(28px,3vw,40px)/1 var(--display); letter-spacing:-.03em; }
     .capability p { max-width:470px; margin:0; color:var(--muted); font-size:13px; line-height:1.6; }
+    .guide-shell { display:grid; gap:16px; }
+    .setup-flow { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; counter-reset:setup; }
+    .setup-step { position:relative; min-height:190px; padding:24px; border:1px solid var(--line); border-radius:18px; background:rgba(255,255,255,.014); overflow:hidden; counter-increment:setup; }
+    .setup-step::before { content:"0" counter(setup); display:block; margin-bottom:36px; color:var(--accent); font:700 9px/1 var(--mono); letter-spacing:.16em; }
+    .setup-step::after { content:""; position:absolute; width:92px; aspect-ratio:1; right:-46px; top:-46px; border:1px solid rgba(var(--accent-rgb),.12); border-radius:50%; }
+    .setup-step h3 { margin:0 0 10px; font:400 25px/1.05 var(--display); }
+    .setup-step p { margin:0; color:var(--muted); font-size:11px; line-height:1.65; }
+    .guide-panel { padding:clamp(24px,4vw,46px); border:1px solid var(--line); border-radius:24px; background:linear-gradient(145deg,rgba(var(--accent-rgb),.055),rgba(255,255,255,.008)); }
+    .guide-panel-head { display:flex; align-items:end; justify-content:space-between; gap:28px; margin-bottom:28px; }
+    .guide-panel-head h3 { margin:8px 0 0; font:400 clamp(34px,4.5vw,54px)/1 var(--display); letter-spacing:-.035em; }
+    .guide-panel-head > p { max-width:470px; margin:0; color:var(--muted); font-size:12px; line-height:1.65; }
+    .guide-kicker { color:var(--accent); font:700 8px/1 var(--mono); letter-spacing:.2em; text-transform:uppercase; }
+    .guide-badges { display:flex; flex-wrap:wrap; gap:7px; margin-bottom:22px; }
+    .guide-badges span { padding:8px 10px; border:1px solid var(--line); border-radius:999px; color:#bcb69e; font:600 8px/1 var(--mono); letter-spacing:.08em; text-transform:uppercase; }
+    .gesture-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+    .gesture-card { min-height:230px; display:flex; flex-direction:column; padding:22px; border:1px solid var(--line); border-radius:17px; background:rgba(5,5,4,.35); }
+    .gesture-card strong { width:44px; height:44px; display:grid; place-items:center; border:1px solid rgba(var(--accent-rgb),.28); border-radius:50%; color:var(--accent); font:700 11px/1 var(--mono); box-shadow:inset 0 0 22px rgba(var(--accent-rgb),.045); }
+    .gesture-card h4 { margin:auto 0 10px; font:400 25px/1.05 var(--display); }
+    .gesture-card p { margin:0; color:var(--muted); font-size:11px; line-height:1.58; }
+    .gesture-card code { display:inline-block; margin-top:12px; color:var(--accent); font:600 9px/1.5 var(--mono); }
+    .guide-callout { display:grid; grid-template-columns:auto 1fr; gap:14px; align-items:start; margin-top:14px; padding:18px; border:1px solid rgba(var(--accent-rgb),.18); border-radius:14px; background:rgba(var(--accent-rgb),.035); }
+    .guide-callout b { width:28px; height:28px; display:grid; place-items:center; border-radius:50%; color:var(--ink); background:var(--accent); font:800 11px/1 var(--mono); }
+    .guide-callout p { margin:0; color:#bcb69e; font-size:11px; line-height:1.65; }
+    .guide-callout strong { color:var(--paper); }
+    .command-library { display:grid; gap:10px; margin-top:14px; }
+    .command-group { border:1px solid var(--line); border-radius:15px; background:rgba(255,255,255,.012); overflow:hidden; }
+    .command-group summary { min-height:64px; display:flex; align-items:center; justify-content:space-between; gap:20px; padding:0 20px; color:var(--paper); cursor:pointer; list-style:none; font:600 13px/1 var(--sans); }
+    .command-group summary::-webkit-details-marker { display:none; }
+    .command-group summary::after { content:"+"; width:28px; height:28px; display:grid; place-items:center; border:1px solid var(--line); border-radius:50%; color:var(--accent); font:400 17px/1 var(--sans); transition:transform .25s; }
+    .command-group[open] summary::after { transform:rotate(45deg); }
+    .command-group summary span { color:var(--muted); font:600 8px/1 var(--mono); letter-spacing:.12em; text-transform:uppercase; }
+    .guide-command-list { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; padding:0 20px 20px; }
+    .command-item { min-width:0; min-height:66px; padding:12px; border:1px solid rgba(var(--accent-rgb),.1); border-radius:10px; background:rgba(0,0,0,.18); }
+    .command-item code { display:block; overflow-wrap:anywhere; color:var(--accent); font:600 10px/1.4 var(--mono); }
+    .command-item small { display:block; margin-top:7px; color:#777363; font-size:9px; line-height:1.35; }
+    .shortcut-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:9px; margin-top:14px; }
+    .shortcut { padding:16px 12px; border:1px solid var(--line); border-radius:12px; background:rgba(255,255,255,.012); }
+    .shortcut kbd { display:block; margin-bottom:10px; color:var(--accent); font:700 9px/1.4 var(--mono); }
+    .shortcut span { color:var(--muted); font-size:9px; line-height:1.4; }
     .availability { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
     .release-panel { padding:34px; border:1px solid var(--line); border-radius:22px; background:rgba(255,255,255,.018); }
     .release-panel.live { border-color:rgba(121,216,162,.24); background:linear-gradient(145deg,rgba(121,216,162,.05),rgba(255,255,255,.01)); }
@@ -677,12 +718,16 @@
       .site-header { grid-template-columns:auto 1fr auto; gap:12px; }
       .main-nav { justify-content:flex-start; overflow:auto; scrollbar-width:none; }
       .main-nav::-webkit-scrollbar { display:none; }
-      .main-nav a:nth-child(3),.main-nav a:nth-child(4) { display:none; }
+      .main-nav a:nth-child(2),.main-nav a:nth-child(4) { display:none; }
       .brand-copy { display:none; }
       .command-stage { height:690px; }
       .feature-card { width:310px; }
       .workspace-body { grid-template-columns:200px 1fr; }
       .section-head { grid-template-columns:1fr; gap:24px; }
+      .setup-flow { grid-template-columns:1fr 1fr; }
+      .gesture-grid { grid-template-columns:1fr 1fr; }
+      .guide-command-list { grid-template-columns:1fr 1fr; }
+      .shortcut-grid { grid-template-columns:repeat(3,1fr); }
       .privacy-panel,.install-panel { grid-template-columns:1fr; }
       .privacy-visual { order:-1; }
       .faq { grid-template-columns:1fr; }
@@ -720,6 +765,13 @@
       .section { width:min(100% - 28px,1180px); padding:82px 0; }
       .capability-grid { grid-template-columns:1fr; }
       .capability:nth-child(n) { grid-column:auto; }
+      .setup-flow,.gesture-grid,.guide-command-list,.shortcut-grid { grid-template-columns:1fr; }
+      .setup-step { min-height:160px; }
+      .guide-panel { padding:24px 16px; }
+      .guide-panel-head { align-items:start; flex-direction:column; gap:12px; }
+      .gesture-card { min-height:205px; }
+      .command-group summary { padding:0 14px; }
+      .guide-command-list { padding:0 14px 14px; }
       .availability { grid-template-columns:1fr; }
       .release-panel { padding:26px; }
       .privacy-panel,.install-panel { padding:28px 20px; }
@@ -813,7 +865,7 @@
         <span class="brand-copy"><strong>OG</strong><small>Local command intelligence</small></span>
       </a>
       <nav class="main-nav" aria-label="Main navigation">
-        <a href="#overview">Overview</a><a href="#capabilities">Capabilities</a><a href="#privacy">Privacy</a><a href="#compare">Compare</a><a href="#install">Install</a>
+        <a href="#overview">Overview</a><a href="#capabilities">Capabilities</a><a href="#how-to-use">How to use</a><a href="#privacy">Privacy</a><a href="#install">Install</a>
       </nav>
       <div class="header-actions">
         <button class="style-action" id="changeStyle" type="button" aria-label="Change website colour style"><i aria-hidden="true"></i><span class="style-label">Change style</span><span class="style-sep">·</span><span id="styleName">Obsidian</span></button>
@@ -829,6 +881,7 @@
           <p>OG turns voice, gestures and everyday language into precise Windows actions—while keeping your preferences and command memory on your device.</p>
           <div class="hero-actions">
             <a class="primary-action download-action" href="https://github.com/uvexgamerofficial-ctrl/OG-Agent/releases/download/v1.0.0-beta/OG-v1.0-beta-package.zip" aria-label="Download OG v1.0 beta for Windows from GitHub">Install v1.0-beta <span>↓</span></a>
+            <a class="secondary-action" href="#how-to-use">How to use OG →</a>
           </div>
         </div>
 
@@ -867,7 +920,7 @@
                 <div class="card-face card-back">
                   <div class="card-index"><span>Gesture / Preview</span><span>Camera</span></div>
                   <h3>Move. Confirm. Done.</h3><p>Adjust sensitivity and require a confirmation pose for protected actions.</p>
-                  <div class="command-list"><code>Swipe → switch workspace</code><code>Pinch → pause media</code></div>
+                  <div class="command-list"><code>Open palm → move pointer</code><code>Closed fist → click or drag</code></div>
                   <button class="explore-button" type="button">Explore interface →</button>
                 </div>
               </div>
@@ -964,10 +1017,146 @@
         </div>
       </section>
 
+      <section class="section section-rule" id="how-to-use" aria-labelledby="howToUseTitle">
+        <div class="section-head reveal">
+          <div><p class="section-label">Complete beta guide</p><h2 id="howToUseTitle">How to use OG.</h2></div>
+          <p>Use the same OG actions through voice or the command console, and use the camera layer for touch-free control. Everything below reflects the v1.0-beta command set.</p>
+        </div>
+
+        <div class="guide-shell">
+          <div class="setup-flow" aria-label="OG setup in four steps">
+            <article class="setup-step reveal"><h3>Download &amp; extract</h3><p>Download the Windows ZIP and extract the complete folder. Do not run OG from inside the compressed ZIP.</p></article>
+            <article class="setup-step reveal"><h3>Start all modes</h3><p>Double-click <code>Start-OG-All.bat</code> so voice, command input, gesture tracking and tray mode start together.</p></article>
+            <article class="setup-step reveal"><h3>Allow permissions</h3><p>Approve microphone and camera access when Windows asks. OG needs both permissions for voice and gesture control.</p></article>
+            <article class="setup-step reveal"><h3>Leave OG in the tray</h3><p>Keep the OG tray icon running. Activate it by voice, gesture or <code>Ctrl + Space</code> whenever you need it.</p></article>
+          </div>
+
+          <section class="guide-panel reveal" aria-labelledby="gestureGuideTitle">
+            <div class="guide-panel-head">
+              <div><span class="guide-kicker">Gesture control · local camera</span><h3 id="gestureGuideTitle">Your hand becomes the controller.</h3></div>
+              <p>Face your palm toward the camera, keep the full hand inside the frame and make one deliberate pose at a time. OG processes gesture tracking locally.</p>
+            </div>
+            <div class="guide-badges" aria-label="Gesture mode details"><span>Camera index 0 by default</span><span>About 150 ms tracking hold</span><span>Press Q to hide preview</span><span>Right-click disabled in beta</span></div>
+            <div class="gesture-grid">
+              <article class="gesture-card"><strong>5F</strong><h4>Move the pointer</h4><p>Show one open palm with all five fingers visible, then move your hand smoothly. The mouse pointer follows your hand.</p><code>OPEN PALM → POINTER MOVE</code></article>
+              <article class="gesture-card"><strong>FST</strong><h4>Click, drag &amp; drop</h4><p>Close the same hand into a fist for left-click. Keep the fist closed while moving to drag; open it to release and drop.</p><code>FIST → CLICK / HOLD / RELEASE</code></article>
+              <article class="gesture-card"><strong>2F</strong><h4>Scroll a page</h4><p>Raise two fingers and move vertically to scroll. Moving farther beyond the scroll boundary increases the scroll speed.</p><code>TWO FINGERS ↕ SCROLL</code></article>
+              <article class="gesture-card"><strong>3F</strong><h4>Switch applications</h4><p>Use a clear three-finger horizontal swipe to move between open applications without touching Alt + Tab.</p><code>THREE-FINGER SWIPE → APP SWITCH</code></article>
+              <article class="gesture-card"><strong>4F</strong><h4>Navigate desktops</h4><p>Swipe four fingers left or right to change virtual desktops. Use a vertical four-finger swipe for Task View and desktop navigation.</p><code>FOUR-FINGER SWIPE → DESKTOP / TASK VIEW</code></article>
+              <article class="gesture-card"><strong>10F</strong><h4>Enter zoom mode</h4><p>Show two open palms and hold for about 350 ms. Move the hands apart to zoom in and together to zoom out proportionally.</p><code>TWO PALMS · 350 MS → PROPORTIONAL ZOOM</code></article>
+            </div>
+            <div class="guide-callout"><b>i</b><p><strong>For reliable tracking:</strong> use even front lighting, keep both wrist and fingertips visible, and avoid a busy background. If the hand disappears briefly, OG holds the last pointer position for about 150 ms. Right-click is intentionally disabled in this beta to reduce accidental actions.</p></div>
+          </section>
+
+          <section class="guide-panel reveal" aria-labelledby="commandGuideTitle">
+            <div class="guide-panel-head">
+              <div><span class="guide-kicker">Voice + command console</span><h3 id="commandGuideTitle">Say it—or type it exactly.</h3></div>
+              <p>Start with short, direct phrases. The examples below can be spoken after activation or typed at the <code>OG&gt;</code> prompt. Type <code>help</code> at any time to see the active registry.</p>
+            </div>
+            <div class="guide-badges"><span>Offline recognition</span><span>English beta model</span><span>Voice + typed input</span><span>Confirmation on protected actions</span></div>
+            <div class="guide-callout"><b>✓</b><p><strong>Control areas in v1.0-beta:</strong> core session, apps, windows, keyboard, mouse, numbered controls, positioning grid, offline dictation, volume, brightness, battery, RAM, storage, system information, screenshots, lock and confirmed power actions, media playback, Windows settings, multi-monitor actions, time and date.</p></div>
+
+            <div class="command-library">
+              <details class="command-group" open>
+                <summary>Core &amp; session controls <span>5 exact commands</span></summary>
+                <div class="guide-command-list">
+                  <div class="command-item"><code>help</code><small>Show every command available in this build.</small></div>
+                  <div class="command-item"><code>status</code><small>Show the current OG runtime state.</small></div>
+                  <div class="command-item"><code>sleep</code><small>Pause active command handling.</small></div>
+                  <div class="command-item"><code>wake</code><small>Wake OG from sleeping mode.</small></div>
+                  <div class="command-item"><code>exit</code><small>Stop OG safely.</small></div>
+                </div>
+              </details>
+
+              <details class="command-group">
+                <summary>Applications &amp; windows <span>launch · focus · resize · close</span></summary>
+                <div class="guide-command-list">
+                  <div class="command-item"><code>open calculator</code><small>Launch an installed Windows application.</small></div>
+                  <div class="command-item"><code>focus notepad</code><small>Bring a matching open window to the front.</small></div>
+                  <div class="command-item"><code>minimize window</code><small>Minimize the active window.</small></div>
+                  <div class="command-item"><code>maximize whatsapp</code><small>Maximize a matching app window.</small></div>
+                  <div class="command-item"><code>restore window</code><small>Restore the active window.</small></div>
+                  <div class="command-item"><code>close window</code><small>Close the active window.</small></div>
+                </div>
+              </details>
+
+              <details class="command-group">
+                <summary>Keyboard, mouse &amp; accessibility <span>precise desktop control</span></summary>
+                <div class="guide-command-list">
+                  <div class="command-item"><code>type hello from OG</code><small>Type text into the active application.</small></div>
+                  <div class="command-item"><code>press enter</code><small>Press a named keyboard key.</small></div>
+                  <div class="command-item"><code>show numbers</code><small>Overlay numbered controls in the active window.</small></div>
+                  <div class="command-item"><code>click 12</code><small>Click the control carrying number 12.</small></div>
+                  <div class="command-item"><code>show grid</code><small>Open the mouse-positioning grid.</small></div>
+                  <div class="command-item"><code>grid 5</code><small>Select grid cell 5; repeat to refine the position.</small></div>
+                  <div class="command-item"><code>click grid</code><small>Click the selected grid position.</small></div>
+                  <div class="command-item"><code>grid back</code><small>Return to the previous grid level.</small></div>
+                  <div class="command-item"><code>hide numbers</code><small>Remove numbered control labels.</small></div>
+                </div>
+              </details>
+
+              <details class="command-group">
+                <summary>Offline dictation &amp; editing <span>write without the keyboard</span></summary>
+                <div class="guide-command-list">
+                  <div class="command-item"><code>start dictation</code><small>Start offline text dictation.</small></div>
+                  <div class="command-item"><code>new line</code><small>Insert a line break while dictating.</small></div>
+                  <div class="command-item"><code>new paragraph</code><small>Start a new paragraph.</small></div>
+                  <div class="command-item"><code>delete last word</code><small>Remove the previous word.</small></div>
+                  <div class="command-item"><code>select last word</code><small>Select the previous word for editing.</small></div>
+                  <div class="command-item"><code>copy</code><small>Copy selected text.</small></div>
+                  <div class="command-item"><code>paste</code><small>Paste clipboard text.</small></div>
+                  <div class="command-item"><code>undo</code><small>Undo the last text change.</small></div>
+                  <div class="command-item"><code>stop dictation</code><small>Stop text dictation safely.</small></div>
+                </div>
+              </details>
+
+              <details class="command-group">
+                <summary>System, media &amp; monitors <span>status · settings · playback</span></summary>
+                <div class="guide-command-list">
+                  <div class="command-item"><code>set volume to 50</code><small>Set the Windows master volume to 50%.</small></div>
+                  <div class="command-item"><code>set brightness to 70</code><small>Set supported display brightness to 70%.</small></div>
+                  <div class="command-item"><code>battery status</code><small>Report battery level and charging state.</small></div>
+                  <div class="command-item"><code>RAM status</code><small>Report memory use and available RAM.</small></div>
+                  <div class="command-item"><code>storage status</code><small>Report free space on the Windows drive.</small></div>
+                  <div class="command-item"><code>take screenshot</code><small>Save a screenshot of all displays.</small></div>
+                  <div class="command-item"><code>play pause</code><small>Play or pause active media.</small></div>
+                  <div class="command-item"><code>next track</code><small>Skip to the next media track.</small></div>
+                  <div class="command-item"><code>open display settings</code><small>Open Windows display settings.</small></div>
+                  <div class="command-item"><code>monitor status</code><small>List displays and their resolutions.</small></div>
+                  <div class="command-item"><code>focus monitor 2</code><small>Move the pointer to monitor 2.</small></div>
+                  <div class="command-item"><code>time status</code><small>Tell the current local time.</small></div>
+                </div>
+              </details>
+
+              <details class="command-group">
+                <summary>Protected power actions <span>confirmation required</span></summary>
+                <div class="guide-command-list">
+                  <div class="command-item"><code>lock computer</code><small>Lock the current Windows session.</small></div>
+                  <div class="command-item"><code>sleep computer</code><small>Prepare system sleep and ask for confirmation.</small></div>
+                  <div class="command-item"><code>restart computer</code><small>Prepare a restart and ask for confirmation.</small></div>
+                  <div class="command-item"><code>shutdown computer</code><small>Prepare shutdown and ask for confirmation.</small></div>
+                  <div class="command-item"><code>confirm</code><small>Approve the pending protected action.</small></div>
+                  <div class="command-item"><code>cancel</code><small>Cancel the pending action.</small></div>
+                </div>
+              </details>
+            </div>
+
+            <div class="shortcut-grid" aria-label="OG keyboard shortcuts">
+              <div class="shortcut"><kbd>Ctrl + Space</kbd><span>Activate OG</span></div>
+              <div class="shortcut"><kbd>Ctrl + Alt + 1…5</kbd><span>Choose a displayed option</span></div>
+              <div class="shortcut"><kbd>Ctrl + Alt + 0</kbd><span>Cancel a choice</span></div>
+              <div class="shortcut"><kbd>Ctrl + Alt + Enter</kbd><span>Confirm a pending action</span></div>
+              <div class="shortcut"><kbd>Ctrl + Shift + S</kbd><span>Toggle Stark Mode</span></div>
+            </div>
+            <div class="guide-callout"><b>?</b><p><strong>If OG finds more than one app or window:</strong> it shows numbered choices. Say or type the number—such as <code>2</code>—while the clarification is pending. For the definitive command list in your installed build, type <code>help</code>.</p></div>
+          </section>
+        </div>
+      </section>
+
       <section class="section section-rule" aria-labelledby="availabilityTitle">
         <div class="section-head reveal"><div><p class="section-label">Clear release state</p><h2 id="availabilityTitle">What you get—and what comes next.</h2></div><p>No vague roadmap promises. Features are separated by the release in which they are intended to be available.</p></div>
         <div class="availability">
-          <article class="release-panel live reveal"><span class="release-badge">● Available in v1.0-beta</span><h3>Core desktop control</h3><div class="release-list"><span><i></i>Voice command interface</span><span><i></i>App and shortcut recognition</span><span><i></i>Windows action workflows</span><span><i></i>Offline local command history</span><span><i></i>Confirmation for protected actions</span></div></article>
+          <article class="release-panel live reveal"><span class="release-badge">● Available in v1.0-beta</span><h3>Core desktop control</h3><div class="release-list"><span><i></i>Offline voice command interface</span><span><i></i>Typed command console</span><span><i></i>Local hand-gesture control</span><span><i></i>App and shortcut recognition</span><span><i></i>Windows action workflows</span><span><i></i>Offline local command history</span><span><i></i>Confirmation for protected actions</span></div></article>
           <article class="release-panel reveal"><span class="release-badge">Coming in v1.0 update</span><h3>Controlled local learning</h3><div class="release-list"><span><i></i>Teach aliases with corrections</span><span><i></i>Preference ranking from successful actions</span><span><i></i>Conflict and duplicate detection</span><span><i></i>Memory edit, forget and reset</span><span><i></i>Versioned backup and rollback</span></div></article>
         </div>
       </section>
@@ -1115,11 +1304,11 @@
       identity: "OG.LOCAL / VISION",
       kicker: "Touch-free shortcuts",
       headline: "Deliberate movement, controlled response.",
-      description: "Gesture mappings are designed around clear poses, adjustable sensitivity and a confirmation gate for protected actions.",
+      description: "Move the pointer with an open palm, click or drag with a fist, scroll with two fingers and navigate apps or desktops with deliberate swipes.",
       panels: `
         <div class="ui-panel wide"><label>Camera field / preview</label><div style="position:relative;height:112px;border:1px solid rgba(var(--accent-rgb),.12);border-radius:12px;background:radial-gradient(circle at 50% 50%,rgba(var(--accent-rgb),.10),transparent 42%),repeating-linear-gradient(90deg,transparent 0 39px,rgba(var(--accent-rgb),.035) 40px);"><span style="position:absolute;left:50%;top:50%;width:58px;height:58px;border:1px solid var(--accent);border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 24px rgba(var(--accent-rgb),.16)"></span></div></div>
-        <div class="ui-panel"><label>Gesture sensitivity</label><strong>Balanced</strong><p>Reduces accidental activation while keeping common gestures responsive.</p><div class="range-track"><i style="width:68%"></i></div></div>
-        <div class="ui-panel"><label>Mapped gestures</label><div class="ui-row"><span>Swipe right</span><strong>Next app</strong></div><div class="ui-row"><span>Pinch</span><strong>Media pause</strong></div><div class="ui-row"><span>Open palm</span><strong>Confirm</strong></div></div>`
+        <div class="ui-panel"><label>Primary control</label><strong>Open palm + fist</strong><p>Five fingers move the pointer. A closed fist clicks, holds and releases for drag-and-drop.</p><div class="range-track"><i style="width:76%"></i></div></div>
+        <div class="ui-panel"><label>Mapped gestures</label><div class="ui-row"><span>Two fingers</span><strong>Scroll</strong></div><div class="ui-row"><span>Three fingers</span><strong>Switch app</strong></div><div class="ui-row"><span>Four fingers</span><strong>Desktop / Task View</strong></div></div>`
     },
     automation: {
       title: "Windows Automation",
